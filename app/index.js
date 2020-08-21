@@ -361,7 +361,7 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
 // })
 
 //default port is 5000
-const port = process.env.port || 5001;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`server is up on ${port}`);
 });
