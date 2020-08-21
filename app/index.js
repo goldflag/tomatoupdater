@@ -3,7 +3,6 @@ const express = require("express");
 const db = require("./db");
 const morgan = require("morgan");
 const helmet = require('helmet');
-const request = require('request');
 const async  = require('express-async-await')
 const fetch = require('node-fetch')
 const { PerformanceObserver, performance } = require('perf_hooks');
