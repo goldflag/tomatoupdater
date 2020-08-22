@@ -6,14 +6,14 @@ function recent24hr(numEntries, currentTime, timeArr) {
         }
     }
     if (!snapShotExists) return 'none';
-    //a week is 1440 minutes long
-    let margin = 480; 
+    //a day is 1440 minutes long
+    let margin = 1440; 
     let properIndex = 0;
 
     for (let i = numEntries - 1; i >= 0; --i) {
         const diff = currentTime - timeArr[i];
-        if (Math.abs(diff - 480) < margin) {
-            margin = Math.abs(diff - 480);
+        if (Math.abs(diff - 1440) < margin) {
+            margin = Math.abs(diff - 1440);
             properIndex = i;
         }
     }
