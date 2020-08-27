@@ -81,11 +81,10 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
             //console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
 
             const exists = await db.query(`SELECT * FROM dev${server} WHERE player_id = $1`, [id]);
-            console.log('ID: ' + id + ' exists: ' + exists.rows[0]);
+            console.log('ID: ' + id);
             // if player isn't already in the database, add to database and return empty stats
             if (!exists.rows[0]) {
                 const username = data1.data[id].nickname;
-                console.log(username);
                 // new array of timestamps
                 const timeArr = [currentTime];
                 // new array of battlestamps
@@ -119,7 +118,6 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                 const index500 = recent500(numEntries, compressedStats.battles, battlesArr);
 
                 const newJson = {"wins": 12};
-                //console.log(exists.rows[0].stats);
                 
                 console.log('no update');
                 console.log('battles dif: ' + (compressedStats.battles - battlesArr[battlesArr.length - 1]));
