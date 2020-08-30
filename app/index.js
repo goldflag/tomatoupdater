@@ -18,7 +18,7 @@ const recent30days = require('./functions/Recent30days.js');
 const recent60days = require('./functions/Recent60days.js');
 const recent1000 = require('./functions/Recent1000.js');
 const recent500 = require('./functions/Recent500.js');
-
+const calculateWN8 = require('./functions/calculateWN8.js')
 const APIKey = process.env.API_KEY;
 
 app.use(morgan('dev'));
@@ -42,6 +42,7 @@ SCHEMA OF TABLE FOR EACH SERVER:
         timeStamps INTEGER[],
         battleStamps INTEGER[],
         stats JSONB[]
+        linegraph JSONB[]
     );
 
     KEY: 
@@ -53,6 +54,8 @@ SCHEMA OF TABLE FOR EACH SERVER:
     timestamps -> array of times for each snapshot from oldest to newest
     battleStamps -> array of num battles for each snapshot from oldest to newest
     stats -> array of stats json files from tankStatsCompresion.js
+    linegraph -> WN8/WR/DPG history for charts
+
 */
 
 app.get("/api/abcd/:server/:id", async (req, res) => {
@@ -84,6 +87,12 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
             console.log('ID: ' + id);
             // if player isn't already in the database, add to database and return empty stats
             if (!exists.rows[0]) {
+                const WN8 = calculateWN8(stats);
+                console.log(`wn8: ${WN8}`);
+                const winrate = (data1.data[id].statistics.all.wins/battles);
+                console.log(`winrate: ${winrate}`);
+                const avgDamage = (data1.data[id].statistics.all.damage_dealt/battles);
+                console.log(`avgDamage: ${avgDamage}`);
                 const username = data1.data[id].nickname;
                 // new array of timestamps
                 const timeArr = [currentTime];
@@ -91,11 +100,21 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                 const battlesArr = [compressedStats.battles];
                 // new array of tank stats snapshots
                 const newEntry = [compressedStats];
-                const newPlayer = await db.query(`INSERT INTO dev${server} (player_id, username, numEntries, lastUpdate, timestamps, battlestamps, stats) VALUES ($1, $2, $3, $4, $5, $6, $7) returning *`, 
-                    [id, username, 1, currentTime, timeArr, battlesArr, newEntry]);
+                // new array for line graph progression charts WN8/Winrate/DPG
+                const newLine = JSON.stringify([
+                    battles,
+                    WN8,
+                    winrate,
+                    avgDamage
+                ]);
+
+                const newLineIns = [newLine];
+                const newPlayer = await db.query(`INSERT INTO dev${server} (player_id, username, numEntries, lastUpdate, timestamps, battlestamps, stats, linegraph) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning *`, 
+                    [id, username, 1, currentTime, timeArr, battlesArr, newEntry, newLineIns]);
                 res.status(200).json({ 
                     status: 'success', 
                     overall: 'frog',
+                    linegraph: [],
                     recent24hr: 'frog',
                     recent1week: 'frog',
                     recent30days: 'frog',
@@ -124,20 +143,42 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                 // Only updates stats if account has played at least one game since last snapshot
                 if (compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) {
                     console.log('update happens');
-                    await db.query(`UPDATE dev${server} SET numEntries = numEntries + 1 WHERE player_id = $1`, [id]);
-                    await db.query(`UPDATE dev${server} SET lastUpdate = $1 WHERE player_id = $2`, [currentTime, id]);
-                    await db.query(`UPDATE dev${server} SET timestamps = array_append(timestamps, $1) WHERE player_id = $2`, [currentTime, id]);
-                    await db.query(`UPDATE dev${server} SET battlestamps = array_append(battlestamps, $1) WHERE player_id = $2`, [compressedStats.battles, id]);
-                    await db.query(`UPDATE dev${server} SET stats = array_append(stats, $1) WHERE player_id = $2`, [compressedStats, id]);
+                    await db.query(
+                        `UPDATE dev${server} SET 
+                        numEntries = numEntries + 1, 
+                        lastUpdate = $2,
+                        timestamps = array_append(timestamps, $2),
+                        battlestamps = array_append(battlestamps, $3),
+                        stats = array_append(stats, $4)
+                        WHERE player_id = $1`,
+                        [id, currentTime, compressedStats.battles, compressedStats]);
+                }
+                if (compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) {
+                    const WN8 = calculateWN8(stats);
+                    console.log(`wn8: ${WN8}`);
+                    const winrate = (data1.data[id].statistics.all.wins/battles);
+                    console.log(`winrate: ${winrate}`);
+                    const avgDamage = (data1.data[id].statistics.all.damage_dealt/battles);
+                    console.log(`avgDamage: ${avgDamage}`);
+                    const newLineIns = JSON.stringify([
+                        battles,
+                        WN8,
+                        winrate,
+                        avgDamage
+                    ]);
+                    await db.query(`UPDATE dev${server} SET linegraph = array_append(linegraph, $2) WHERE player_id = $1`, [id, newLineIns])
+
                 }
                 // Removes oldest snapshot if it is more than 180 days old
                 if (currentTime - timeArr[0] > 259200) {
                     console.log('delete old data');
                     try {
-                        await db.query(`UPDATE dev${server} SET timeStamps = timeStamps[2:] WHERE player_id = $1`, [id]);
-                        await db.query(`UPDATE dev${server} SET battleStamps = battleStamps[2:] WHERE player_id = $1`, [id]);
-                        await db.query(`UPDATE dev${server} SET stats = stats[2:] WHERE player_id = $1`, [id]);
-                        await db.query(`UPDATE dev${server} SET numEntries = numEntries - 1 WHERE player_id = $1`, [id]);
+                        await db.query(`UPDATE dev${server} SET 
+                        timeStamps = timeStamps[2:],
+                        battleStamps = battleStamps[2:],
+                        stats = stats[2:],
+                        numEntries = numEntries - 1
+                        WHERE player_id = $1`, [id]);
                     } catch(err) {
                         console.log(err);
                     }
@@ -146,6 +187,7 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                     server: server,
                     username: exists.rows[0].username,
                     status: 'success', 
+                    linegraph: exists.rows[0].linegraph,
                     overall: compressedStats,
                     recent24hr: exists.rows[0].stats[index24hr] || 'frog',
                     recent1week: exists.rows[0].stats[index1week] || 'frog',
