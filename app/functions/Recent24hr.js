@@ -12,8 +12,10 @@ function recent24hr(numEntries, currentTime, timeArr) {
 
     for (let i = numEntries - 1; i >= 0; --i) {
         const diff = currentTime - timeArr[i];
+        console.log("diff" + diff);
         if (Math.abs(diff - 1440) < margin) {
             margin = Math.abs(diff - 1440);
+            console.log('margin' + margin);
             properIndex = i;
         }
     }

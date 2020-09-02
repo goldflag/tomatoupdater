@@ -141,8 +141,8 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                 console.log('no update');
                 console.log('battles dif: ' + (compressedStats.battles - battlesArr[battlesArr.length - 1]));
                 // Only updates stats if account has played at least one game since last snapshot
-                if (compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) {
-                    console.log('update happens');
+                if ((compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) || (currentTime - timeArr[timeArr.length - 1] > 360)) {
+                    console.log(`update happens battles passed:  ${compressedStats.battles - battlesArr[battlesArr.length - 1]} time:  ${currentTime - timeArr[timeArr.length - 1]}`);
                     await db.query(
                         `UPDATE dev${server} SET 
                         numEntries = numEntries + 1, 
@@ -153,7 +153,7 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                         WHERE player_id = $1`,
                         [id, currentTime, compressedStats.battles, compressedStats]);
                 }
-                if (compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) {
+                if (compressedStats.battles - battlesArr[battlesArr.length - 1] > 10) {
                     const WN8 = calculateWN8(stats);
                     console.log(`wn8: ${WN8}`);
                     const winrate = (data1.data[id].statistics.all.wins/battles);
