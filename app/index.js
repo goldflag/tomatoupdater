@@ -138,7 +138,7 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                 const battlesArr = exists.rows[0].battlestamps;
                 // returns the index of respective stats snapshots for each period
                 const index24hr = recent24hr(numEntries, currentTime, timeArr);
-                const index3days = recent3days(numEntries, currentTime, timeArr);
+                const index3days = recent1week(numEntries, currentTime, timeArr);
                 const index1week = recent1week(numEntries, currentTime, timeArr);
                 const index30days = recent30days(numEntries, currentTime, timeArr);
                 const index60days = recent60days(numEntries, currentTime, timeArr);
