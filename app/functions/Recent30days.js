@@ -1,13 +1,13 @@
 function recent30days(numEntries, currentTime, timeArr) {
     let snapShotExists = false;
     for (let i = numEntries - 1; i >= 0; --i) {
+        //if (currentTime - timeArr[i] < 93600) {
         if (currentTime - timeArr[i] < 47520) {
-        // if (currentTime - timeArr[i] < 11520) {
             snapShotExists = true;
         }
     }
     if (!snapShotExists) return 'none';
-    //30 days is is 43200 minutes long
+    //60 days is is 86400 minutes long
     let margin = 43200; 
     let properIndex = 0;
     for (let i = numEntries - 1; i >= 0; --i) {
