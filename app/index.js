@@ -9,6 +9,8 @@ const async  = require('express-async-await')
 const fetch = require('node-fetch')
 const { PerformanceObserver, performance } = require('perf_hooks');
 
+
+
 const app = express();
 
 //compresses tank stats into more readable form
@@ -29,12 +31,13 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(helmet());
-
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://tomato.gg');
-    res.header('Access-Control-Allow-Headers', "*");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
 
 /*
 There are 4 tables for the servers NA, EU, RU, and ASIA named devcom, deveu, devru, and devasia
