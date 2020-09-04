@@ -13,6 +13,7 @@ const app = express();
 const tankStatsCompression = require('./functions/tankStatsCompression.js');
 //gives index of which stats json snapshot to attach to return file
 const recent24hr = require('./functions/Recent24hr.js');
+const recent3days = require('./functions/Recent3days.js');
 const recent1week = require('./functions/Recent1week.js');
 const recent30days = require('./functions/Recent30days.js');
 const recent60days = require('./functions/Recent60days.js');
@@ -122,6 +123,7 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                     overall: 'frog',
                     linegraph: [],
                     recent24hr: 'frog',
+                    recent3days: 'frog',
                     recent1week: 'frog',
                     recent30days: 'frog',
                     recent60days: 'frog', 
@@ -136,6 +138,7 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                 const battlesArr = exists.rows[0].battlestamps;
                 // returns the index of respective stats snapshots for each period
                 const index24hr = recent24hr(numEntries, currentTime, timeArr);
+                const index3days = recent3days(numEntries, currentTime, timeArr);
                 const index1week = recent1week(numEntries, currentTime, timeArr);
                 const index30days = recent30days(numEntries, currentTime, timeArr);
                 const index60days = recent60days(numEntries, currentTime, timeArr);
@@ -196,6 +199,7 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                     linegraph: exists.rows[0].linegraph,
                     overall: compressedStats,
                     recent24hr: exists.rows[0].stats[index24hr] || 'frog',
+                    recent3days: exists.rows[0].stats[index3days] || 'frog',
                     recent1week: exists.rows[0].stats[index1week] || 'frog',
                     recent30days: exists.rows[0].stats[index30days] || 'frog',
                     recent60days: exists.rows[0].stats[index60days] || 'frog',
