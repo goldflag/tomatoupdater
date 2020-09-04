@@ -114,9 +114,9 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                     overall: 'frog',
                     linegraph: [],
                     recent24hr: 'frog',
+                    recent3days: 'frog',
                     recent1week: 'frog',
                     recent30days: 'frog',
-                    recent60days: 'frog', 
                     recent1000: 'frog',
                     recent500: 'frog',
                 });             
@@ -128,9 +128,9 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                 const battlesArr = exists.rows[0].battlestamps;
                 // returns the index of respective stats snapshots for each period
                 const index24hr = recent24hr(numEntries, currentTime, timeArr);
-                const index1week = recent3days(numEntries, currentTime, timeArr);
-                const index30days = recent1week(numEntries, currentTime, timeArr);
-                const index60days = recent30days(numEntries, currentTime, timeArr);
+                const index3days = recent3days(numEntries, currentTime, timeArr);
+                const index1week = recent1week(numEntries, currentTime, timeArr);
+                const index30days = recent30days(numEntries, currentTime, timeArr);
                 const index1000 = recent1000(numEntries, compressedStats.battles, battlesArr);
                 const index500 = recent500(numEntries, compressedStats.battles, battlesArr);
 
@@ -188,9 +188,9 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                     linegraph: exists.rows[0].linegraph,
                     overall: compressedStats,
                     recent24hr: exists.rows[0].stats[index24hr] || 'frog',
+                    recent3days: exists.rows[0].stats[index3days] || 'frog',
                     recent1week: exists.rows[0].stats[index1week] || 'frog',
                     recent30days: exists.rows[0].stats[index30days] || 'frog',
-                    recent60days: exists.rows[0].stats[index60days] || 'frog',
                     recent1000: exists.rows[0].stats[index1000] || 'frog',
                     recent500: exists.rows[0].stats[index500] || 'frog',
                 }); 
