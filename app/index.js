@@ -65,10 +65,18 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
 
         let battles = 0;
         let stats = {};
-        let fetch1 = await fetch(`https://api.worldoftanks.${server}/wot/account/info/?application_id=${APIKey}&account_id=${id}`);
-        let fetch2 = await fetch(`https://api.worldoftanks.${server}/wot/tanks/stats/?application_id=${APIKey}&account_id=${id}&fields=mark_of_mastery%2C+tank_id%2C+all`);
-        let data1 = await fetch1.json();
-        let data2 = await fetch2.json();
+        let data1;
+        let data2;
+        await Promise.all([
+            fetch(`https://api.worldoftanks.${server}/wot/account/info/?application_id=${APIKey}&account_id=${id}`),
+            fetch(`https://api.worldoftanks.${server}/wot/tanks/stats/?application_id=${APIKey}&account_id=${id}&fields=mark_of_mastery%2C+tank_id%2C+all`),
+        ])
+        .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
+        .then(([d1, d2]) => 
+        {
+            data1 = d1;
+            data2 = d2;
+        });
         //number of battles overall an account has
         battles = data1.data[id].statistics.all.battles;
         if (battles > 0) {
@@ -200,202 +208,6 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
         console.log(err);
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-// app.get("/dummy", async (req, res) => {
-//     res.status(200).json({ 
-//         status: 'success', 
-//         recent24hr: {},
-//         recent1week: {},
-//         recent30days: {},
-//         recent60days: {},
-//         recent1000: {},
-//         recent500: {},
-//         stats: {}
-//     }); 
-
-// });
-
-
-// app.get("/Napi/com/:id/test", async (req, res) => {
-//     const timeArr = [1000, 1541, 1678, 2210, 3810, 4000];
-//     const battlesArr = [1200, 1701, 1750, 1800, 1998, 2001];
-//     const stats2 = [{"period": "60 days"}, {"period": "1k"}, {"period": "30days"}, {"period": "1 week"}, {"period": "none"}, {"period": "500"}];
-//     try {
-//         const newPlayer = await db.query("INSERT INTO testcom (player_id, username, numEntries, lastUpdate, timestamps, battlestamps, stats) VALUES ($1, $2, $3, $4, $5, $6, $7) returning *", 
-//         [8, 'tester', 6, 0, timeArr, battlesArr, stats2]);
-//         res.send('success');
-//     }
-//     catch(err){
-//         console.log(err);
-//     }
-// });
-
-// app.get("/oldapi/:server/:id", async (req, res) => {
-//     try {
-//         let currentTime = parseInt(Date.now()/60000);
-
-//         currentTime = 4001;
-//         console.log(currentTime)
-//         const server = req.params.server;
-//         const id = req.params.id;      
-
-//         let battles = 0;
-//         let stats = {};
-//         let fetch1 = await fetch(`https://api.worldoftanks.com/wot/account/info/?application_id=bd589e105895f2f6b8af31f27da3e05e&account_id=1011694618`);
-//         let fetch2 = await fetch(`https://api.worldoftanks.com/wot/tanks/stats/?application_id=bd589e105895f2f6b8af31f27da3e05e&account_id=1011694618&fields=mark_of_mastery%2C+tank_id%2C+all`);
-//         let data1 = await fetch1.json();
-//         let data2 = await fetch2.json();
-//         //number of battles overall an account has
-//         battles = data1.data[1011694618].statistics.all.battles;
-//         //array of overall tank stats
-//         stats = data2.data[1011694618];
-//         // console.log(stats);
-
-//         const compressedStats = tankStatsCompression(stats, currentTime, battles);
-
-//         const exists = await db.query("SELECT * FROM testcom WHERE player_id = $1", [id]);
-//         console.log('ID: ' + id + ' exists: ' + exists.rows[0]);
-//         if (!exists.rows[0]) {
-//             const username = data1.data[1011694618].nickname;
-//             console.log(username);
-
-//             const timeArr = [currentTime];
-//             const battlesArr = [battles];
-//             const stats2 = [{"wins": 10}];
-//             const newPlayer = await db.query("INSERT INTO testcom (player_id, username, numEntries, lastUpdate, timestamps, battlestamps, stats) VALUES ($1, $2, $3, $4, $5, $6, $7) returning *", 
-//                 [id, username, 1, currentTime, timeArr, battlesArr, stats2]);
-
-//             res.send('new account');
-//         }
-//         else {
-//             const numEntries = exists.rows[0].numentries;
-//             const timeArr = exists.rows[0].timestamps;
-//             const battlesArr = exists.rows[0].battlestamps;
-
-//             const index24hr = recent24hr(numEntries, currentTime, timeArr);
-//             const index1week = recent1week(numEntries, currentTime, timeArr);
-//             const index30days = recent30days(numEntries, currentTime, timeArr);
-//             const index60days = recent60days(numEntries, currentTime, timeArr);
-
-//             const index1000 = recent1000(numEntries, 2500, battlesArr);
-//             const index500 = recent500(numEntries, 2500, battlesArr);
-
-//             const newJson = {"wins": 12};
-//             //console.log(exists.rows[0].stats);
-//             if (currentTime - exists.rows[0].lastupdate > 0) {
-//                 const updateEntries = await db.query("UPDATE testcom SET numEntries = numEntries + 1 WHERE player_id = $1", [id]);
-//                 const updateTime = await db.query("UPDATE testcom SET lastUpdate = $1 WHERE player_id = $2", [currentTime, id]);
-//                 const updateTimeArr = await db.query("UPDATE testcom SET timestamps = array_append(timestamps, $1) WHERE player_id = $2", [currentTime, id]);
-//                 const updateBattlesArr = await db.query("UPDATE testcom SET battlestamps = array_append(battlestamps, $1) WHERE player_id = $2", [2500, id]);
-//                 const updateStats = await db.query("UPDATE testcom SET stats = array_append(stats, $1) WHERE player_id = $2", [newJson, id]);
-//             }
-
-//             if (currentTime - timeArr[0] > 100) {
-//                 console.log('fuark');
-//                 try {
-//                     await db.query(`UPDATE testcom SET timeStamps = timeStamps[2:] WHERE player_id = $1`, [id]);
-//                     await db.query(`UPDATE testcom SET battleStamps = battleStamps[2:] WHERE player_id = $1`, [id]);
-//                     await db.query(`UPDATE testcom SET stats = stats[2:] WHERE player_id = $1`, [id]);
-//                     await db.query(`UPDATE testcom SET numEntries = numEntries - 1 WHERE player_id = $1`, [id]);
-//                 } catch(err) {
-//                     console.log('fuark' + err);
-//                 }
-//             }
-    
-//             res.status(200).json({ 
-//                 status: 'success', 
-//                 recent24hr: exists.rows[0].stats[index24hr] || 'frog',
-//                 recent1week: exists.rows[0].stats[index1week] || 'frog',
-//                 recent30days: exists.rows[0].stats[index30days] || 'frog',
-//                 recent60days: exists.rows[0].stats[index60days] || 'frog',
-//                 recent1000: exists.rows[0].stats[index1000] || 'frog',
-//                 recent500: exists.rows[0].stats[index500] || 'frog',
-//                 stats: exists.rows[0]
-//             }); 
-//         }   
-
-//     } catch(err) {
-//         console.log(err);
-//     }
-// });
-
-
-// // get all restaurants
-// app.get("/api/v1/getRestaurants", async (req, res) => {
-//     try {
-//         const results = await db.query("SELECT * FROM restaurants");
-//         console.log(results);
-//         res.status(200).json({ 
-//             status: 'success', 
-//             results: results.rows.length,
-//             data: {
-//                 restaurants: results.rows,
-//             }
-//         });    
-//     } catch(err) {
-//         console.log(err);
-//     }
-// });
-
-// // add a new restaurant
-// app.post("/api/v1/restaurants", async (req, res) => {
-//     try {
-//         const body = req.body;
-//         const results = await db.query("INSERT INTO RESTAURANTS (name, location, price_range) VALUES ($1, $2, $3) returning *", [body.name, body.location, body.price_range]);
-//         console.log(results);
-//         res.status(201).json({ 
-//             status: 'success', 
-//             results: results.rows.length,
-//             data: {
-//                 restaurants: results.rows[0],
-//             }
-//         });    
-//     } catch(err) {
-//         console.log(err);
-//     }
-// });
-
-// //update a restaurant
-// app.put("/api/v1/restaurants/:id", async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const results = await db.query("UPDATE RESTAURANTS SET name = $2, location = $3, price_range = $4 WHERE id = $1 returning *", [id, req.body.name, req.body.location, req.body.price_range]);
-//         console.log(results);
-//         res.status(200).json({ 
-//             status: 'success', 
-//             data: {
-//                 restaurants: results.rows[0],
-//             }
-//         });    
-//     } catch(err) {
-//         console.log(err);
-//     }
-// });
-
-// //delete
-// app.delete("/api/v1/restaurants/:id", async (req,res) => {
-//     try {
-//         const id = req.params.id;
-//         const results = await db.query("DELETE FROM restaurants WHERE id = $1", [id]);
-//         console.log(results);
-//         res.status(204).json({ 
-//             status: 'success', 
-//         });    
-//     } catch(err) {
-//         console.log(err);
-//     }
-// })
 
 //default port is 5000
 const port = process.env.PORT || 5000;
