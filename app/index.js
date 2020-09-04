@@ -23,7 +23,7 @@ const recent1000 = require('./functions/Recent1000.js');
 const recent500 = require('./functions/Recent500.js');
 const calculateWN8 = require('./functions/calculateWN8.js')
 const APIKey = process.env.API_KEY;
-app.use(cors());
+app.use(cors({origin: true}));
 
 //app.use(morgan('dev'));
 app.use(express.json());
