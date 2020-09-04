@@ -1,5 +1,7 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require('cors');
+
 const db = require("./db");
 const morgan = require("morgan");
 const helmet = require('helmet');
@@ -22,14 +24,14 @@ const recent1000 = require('./functions/Recent1000.js');
 const recent500 = require('./functions/Recent500.js');
 const calculateWN8 = require('./functions/calculateWN8.js')
 const APIKey = process.env.API_KEY;
+app.use(cors());
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(helmet());
-app.use(cors());
 
 // app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', 'tomato.gg');
+//     res.header('Access-Control-Allow-Origin', 'https://tomato.gg');
 //     res.header('Access-Control-Allow-Headers', "*");
 //     next();
 // });
