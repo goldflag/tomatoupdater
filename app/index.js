@@ -62,6 +62,7 @@ SCHEMA OF TABLE FOR EACH SERVER:
 */
 
 app.get("/api/abcd/:server/:id", async (req, res) => {
+
     try {
         let currentTime = parseInt(Date.now()/60000);
         console.log(currentTime)
@@ -70,10 +71,21 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
 
         let battles = 0;
         let stats = {};
-        let fetch1 = await fetch(`https://api.worldoftanks.${server}/wot/account/info/?application_id=${APIKey}&account_id=${id}`);
-        let fetch2 = await fetch(`https://api.worldoftanks.${server}/wot/tanks/stats/?application_id=${APIKey}&account_id=${id}&fields=mark_of_mastery%2C+tank_id%2C+all`);
-        let data1 = await fetch1.json();
-        let data2 = await fetch2.json();
+        console.time("Time this");
+
+        let data1;
+        let data2;
+        await Promise.all([
+            fetch(`https://api.worldoftanks.${server}/wot/account/info/?application_id=${APIKey}&account_id=${id}`),
+            fetch(`https://api.worldoftanks.${server}/wot/tanks/stats/?application_id=${APIKey}&account_id=${id}&fields=mark_of_mastery%2C+tank_id%2C+all`),
+        ])
+        .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
+        .then(([d1, d2]) => 
+        {
+            data1 = d1;
+            data2 = d2;
+        });
+
         //number of battles overall an account has
         battles = data1.data[id].statistics.all.battles;
         if (battles > 0) {
@@ -210,6 +222,9 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
     } catch(err) {
         console.log(err);
     }
+    //console.timeEnd("Time this");
+    console.timeEnd("Time this");
+
 });
 
 
