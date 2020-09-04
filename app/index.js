@@ -123,7 +123,6 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                     overall: 'frog',
                     linegraph: [],
                     recent24hr: 'frog',
-                    recent3days: 'frog',
                     recent1week: 'frog',
                     recent30days: 'frog',
                     recent60days: 'frog', 
@@ -138,7 +137,6 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                 const battlesArr = exists.rows[0].battlestamps;
                 // returns the index of respective stats snapshots for each period
                 const index24hr = recent24hr(numEntries, currentTime, timeArr);
-                const index3days = recent1week(numEntries, currentTime, timeArr);
                 const index1week = recent1week(numEntries, currentTime, timeArr);
                 const index30days = recent30days(numEntries, currentTime, timeArr);
                 const index60days = recent60days(numEntries, currentTime, timeArr);
@@ -199,7 +197,6 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
                     linegraph: exists.rows[0].linegraph,
                     overall: compressedStats,
                     recent24hr: exists.rows[0].stats[index24hr] || 'frog',
-                    recent3days: exists.rows[0].stats[index3days] || 'frog',
                     recent1week: exists.rows[0].stats[index1week] || 'frog',
                     recent30days: exists.rows[0].stats[index30days] || 'frog',
                     recent60days: exists.rows[0].stats[index60days] || 'frog',
@@ -212,6 +209,8 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
         console.log(err);
     }
 });
+
+
 
 //default port is 5000
 const port = process.env.PORT || 5000;
