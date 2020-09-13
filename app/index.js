@@ -13,9 +13,9 @@ const app = express();
 const tankStatsCompression = require('./functions/tankStatsCompression.js');
 //gives index of which stats json snapshot to attach to return file
 const recent24hr = require('./functions/Recent24hr.js');
-const recent3days = require('./functions/Recent1week.js');
-const recent1week = require('./functions/Recent30days.js');
-const recent30days = require('./functions/Recent60days.js');
+const recent3days = require('./functions/Recent3days.js');
+const recent1week = require('./functions/Recent1week.js');
+const recent30days = require('./functions/Recent30days.js');
 const recent1000 = require('./functions/Recent1000.js');
 const recent500 = require('./functions/Recent500.js');
 const calculateWN8 = require('./functions/calculateWN8.js')
