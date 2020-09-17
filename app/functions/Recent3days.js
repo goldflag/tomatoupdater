@@ -1,4 +1,4 @@
-function recent3days(numEntries, currentTime, timeArr) {
+function recent3days(stats, numEntries, currentTime, timeArr) {
     let snapShotExists = false;
     for (let i = numEntries - 1; i >= 0; --i) {
         // if (currentTime - timeArr[i] < 11520) {
@@ -18,6 +18,9 @@ function recent3days(numEntries, currentTime, timeArr) {
             margin = Math.abs(diff - 4320);
             properIndex = i;
         }
+    }
+    while (Object.keys(stats[properIndex]).length === 0) {
+        properIndex--;
     }
     return properIndex;
 }

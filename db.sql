@@ -87,6 +87,20 @@ CREATE TABLE devru (
     stats JSONB[]
 );
 
+
+CREATE TABLE test (
+    id serial NOT NULL PRIMARY KEY,
+    stats JSONB[]
+);
+
+
+UPDATE test SET stats[2] = (
+    CASE WHEN stats[2] = '{}'::JSONB THEN stats[1]
+         ELSE stats[3]
+    END) WHERE id = 1;
+
+    
+
 insert into test (player_id, timestamps, battlestamps, stats) VALUES (1500, ARRAY [2313], ARRAY [2332], '[ {"wins": 10} ]');
 
 

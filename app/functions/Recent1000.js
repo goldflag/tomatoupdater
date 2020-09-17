@@ -1,4 +1,4 @@
-function recent1000(numEntries, currentBattles, battlesArr) {
+function recent1000(stats, numEntries, currentBattles, battlesArr) {
     let margin = 1000; 
     let properIndex = 0;
     for (let i = numEntries - 1; i >= 0; --i) {
@@ -7,6 +7,9 @@ function recent1000(numEntries, currentBattles, battlesArr) {
             margin = Math.abs(diff - 1000);
             properIndex = i;
         }
+    }
+    while (Object.keys(stats[properIndex]).length === 0) {
+        properIndex--;
     }
     return properIndex;
 }
