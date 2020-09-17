@@ -35,7 +35,7 @@ app.use((req, res, next) => {
     next();
 });
 
-cron.schedule("0 1 * * *", function() {
+cron.schedule("0 5 * * *", function() {
     console.log("Running NA Update at 3:27am");
     //activeUpdater();
     updater();
@@ -43,7 +43,7 @@ cron.schedule("0 1 * * *", function() {
 // , { timezone: "America/New_York" }
 );
 
-cron.schedule("17 6 * * *", function() {
+cron.schedule("41 21 * * *", function() {
     console.log("Running Active Updater");
     //activeUpdater();
     activeUpdater();
@@ -197,22 +197,21 @@ async function exitingPlayer(res, stats, data1, currentTime, server, id, exists,
             WHERE player_id = $1`,
             [id, currentTime, numBattles, newCompressed]);
         }
-    if (compressedStats.battles - battlesArr[battlesArr.length - 1] > 10) {
-        const WN8 = calculateWN8(stats);
-        //console.log(`wn8: ${WN8}`);
-        const winrate = (data1.data[id].statistics.all.wins/battles);
-        //console.log(`winrate: ${winrate}`);
-        const avgDamage = (data1.data[id].statistics.all.damage_dealt/battles);
-        //console.log(`avgDamage: ${avgDamage}`);
-        const newLineIns = JSON.stringify([
-            battles,
-            WN8,
-            winrate,
-            avgDamage
-        ]);
-        await db.query(`UPDATE dev${server} SET linegraph = array_append(linegraph, $2) WHERE player_id = $1`, [id, newLineIns])
-
-    }
+    // if (compressedStats.battles - battlesArr[battlesArr.length - 1] > 10) {
+    //     const WN8 = calculateWN8(stats);
+    //     //console.log(`wn8: ${WN8}`);
+    //     const winrate = (data1.data[id].statistics.all.wins/battles);
+    //     //console.log(`winrate: ${winrate}`);
+    //     const avgDamage = (data1.data[id].statistics.all.damage_dealt/battles);
+    //     //console.log(`avgDamage: ${avgDamage}`);
+    //     const newLineIns = JSON.stringify([
+    //         battles,
+    //         WN8,
+    //         winrate,
+    //         avgDamage
+    //     ]);
+    //     await db.query(`UPDATE dev${server} SET linegraph = array_append(linegraph, $2) WHERE player_id = $1`, [id, newLineIns])
+    // }
     // Removes oldest snapshot if it is more than 180 days old
     if (currentTime - timeArr[0] > 259200) {
         console.log('delete old data');
