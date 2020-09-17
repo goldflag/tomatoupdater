@@ -43,7 +43,7 @@ cron.schedule("0 5 * * *", function() {
 // , { timezone: "America/New_York" }
 );
 
-cron.schedule("41 21 * * *", function() {
+cron.schedule("45 21 * * *", function() {
     console.log("Running Active Updater");
     //activeUpdater();
     activeUpdater();

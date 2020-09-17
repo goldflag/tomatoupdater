@@ -3,11 +3,12 @@ const fetch = require("node-fetch");
 const fs = require('fs');
 
 let successful = 0;
+const APIKey = process.env.API_KEY;
 
 const finalidArr = [];
 
 async function APIcall(idstr, index, idArr, time) {
-    const res = await fetch(`https://api.worldoftanks.com/wot/account/info/?application_id=0e195fd37cad7175c7b6a033aff0fcff&account_id=${idstr}&fields=last_battle_time%2C+statistics.all.battles`)
+    const res = await fetch(`https://api.worldoftanks.com/wot/account/info/?application_id=${APIKey}&account_id=${idstr}&fields=last_battle_time%2C+statistics.all.battles`)
     const data = await res.json();
     //console.log(data);
     for (let i = 0; i < idArr.length; ++i) {
