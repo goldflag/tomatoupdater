@@ -6,31 +6,32 @@ let successful = 0;
 
 const finalidArr = [];
 
-async function APIcall(idstr, index, idArr) {
+async function APIcall(idstr, index, idArr, time) {
     const res = await fetch(`https://api.worldoftanks.com/wot/account/info/?application_id=0e195fd37cad7175c7b6a033aff0fcff&account_id=${idstr}&fields=last_battle_time%2C+statistics.all.battles`)
     const data = await res.json();
     //console.log(data);
     for (let i = 0; i < idArr.length; ++i) {
-        if (data.data[idArr[i]] != null && data.data[idArr[i]].last_battle_time > 1596864797 && data.data[idArr[i]].statistics.all.battles > 100) {
+        if (data.data[idArr[i]] != null && data.data[idArr[i]].last_battle_time > time && data.data[idArr[i]].statistics.all.battles > 100) {
             finalidArr.push(idArr[i]);
             successful++;
         }
     }
-
     if (index%1000 === 0) {
         console.log(`successful: ${successful} counter: ${index}`);
     }
-    if (index >= 4100) {
+    if (index >= 41000000) {
         let data = JSON.stringify(finalidArr);
-        fs.writeFileSync('./NAids.json', data);
+        fs.writeFileSync('./app/updater/NAids.json', data);
         console.log('NA IDs are complete');
     }
 }
 //40000000
 function loop() {
+    const time = Date.now() - 1209600;
+    console.log(`currentTime: ${Date.now()}`);
     let counter = 1000000000;
-    for (let i = 0; i <= 4100; i = i + 100) {
-    //for (let i = 0; i < 41000000; i = i + 100) {
+    //for (let i = 0; i <= 4100; i = i + 100) {
+    for (let i = 0; i < 41000000; i = i + 100) {
         setTimeout(function () {
             let firstID = counter + i;
             let idArr = [firstID];
@@ -41,7 +42,7 @@ function loop() {
                 idArr.push(id);
             }
             //console.log('frog');
-            APIcall(idstr, i, idArr);
+            APIcall(idstr, i, idArr, time);
         }, i * 1.1);
     }
 }

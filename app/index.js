@@ -35,11 +35,21 @@ app.use((req, res, next) => {
     next();
 });
 
-cron.schedule("31 3 * * *", function() {
+cron.schedule("0 1 * * *", function() {
     console.log("Running NA Update at 3:27am");
     //activeUpdater();
     updater();
-}, { timezone: "America/New_York" }
+}
+// , { timezone: "America/New_York" }
+);
+
+
+cron.schedule("10 2 * * *", function() {
+    console.log("Running Active Updater");
+    //activeUpdater();
+    activeUpdater();
+}
+// , { timezone: "America/New_York" }
 );
 
 /*
