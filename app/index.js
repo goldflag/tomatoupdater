@@ -36,10 +36,11 @@ app.use((req, res, next) => {
 });
 
 cron.schedule("12 3 * * *", function() {
-    console.log("Running NA Update at 3:12am");
+    console.log("Running NA Update at 3:27am");
     //activeUpdater();
     updater();
-});
+}, { timezone: "America/Detroit" }
+);
 
 /*
 There are 4 tables for the servers NA, EU, RU, and ASIA named devcom, deveu, devru, and devasia
