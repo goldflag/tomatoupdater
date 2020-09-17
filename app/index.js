@@ -35,8 +35,8 @@ app.use((req, res, next) => {
     next();
 });
 
-cron.schedule("0 1 * * *", function() {
-    console.log("Running NA Update at 1am");
+cron.schedule("12 3 * * *", function() {
+    console.log("Running NA Update at 3:12am");
     //activeUpdater();
     updater();
 });
@@ -166,7 +166,7 @@ async function exitingPlayer(res, stats, data1, currentTime, server, id, exists,
     const index1week = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 10800);
     const index30days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 43200);
     const index1000 = recentBattles(exists.rows[0].stats, numEntries, compressedStats.battles, battlesArr, 1000);
-    const index500 = recentBattles(exists.rows[0].stats, numEntries, compressedStats.battles, battlesArr, 3);
+    const index500 = recentBattles(exists.rows[0].stats, numEntries, compressedStats.battles, battlesArr, 100);
 
     console.log('battles dif: ' + (compressedStats.battles - battlesArr[battlesArr.length - 1]));
     // Only updates stats if account has played at least one game since last snapshot
