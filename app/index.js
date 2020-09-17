@@ -43,8 +43,7 @@ cron.schedule("0 1 * * *", function() {
 // , { timezone: "America/New_York" }
 );
 
-
-cron.schedule("10 2 * * *", function() {
+cron.schedule("17 6 * * *", function() {
     console.log("Running Active Updater");
     //activeUpdater();
     activeUpdater();
@@ -181,7 +180,7 @@ async function exitingPlayer(res, stats, data1, currentTime, server, id, exists,
 
     console.log('battles dif: ' + (compressedStats.battles - battlesArr[battlesArr.length - 1]));
     // Only updates stats if account has played at least one game since last snapshot
-    if ((compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) || (currentTime - timeArr[timeArr.length - 1] > 0)) {
+    if ((compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) || (currentTime - timeArr[timeArr.length - 1] > 360)) {
         console.log(`update happens battles passed:  ${compressedStats.battles - battlesArr[battlesArr.length - 1]} time:  ${currentTime - timeArr[timeArr.length - 1]}`);
         const numBattles = compressedStats.battles;
         let newCompressed = compressedStats;
