@@ -36,20 +36,14 @@ app.use((req, res, next) => {
 });
 
 cron.schedule("0 5 * * *", function() {
-    console.log("Running NA Update at 3:27am");
-    //activeUpdater();
+    console.log("Running NA Update at 1am");
     updater();
-}
-// , { timezone: "America/New_York" }
-);
+});
 
-cron.schedule("45 21 * * *", function() {
-    console.log("Running Active Updater");
-    //activeUpdater();
-    //activeUpdater();
-}
-// , { timezone: "America/New_York" }
-);
+// cron.schedule("43 20 * * *", function() {
+//     console.log("Running Active Updater");
+//     activeUpdater();
+// });
 
 /*
 There are 4 tables for the servers NA, EU, RU, and ASIA named devcom, deveu, devru, and devasia
@@ -78,7 +72,7 @@ SCHEMA OF TABLE FOR EACH SERVER:
 */
 
 app.get("/api/abcd/:file", async (req, res) => {
-    if (req.params.server === 'tankNames') res.status(200).json(tankNames);  
+    if (req.params.file === 'tankNames') res.status(200).json(tankNames);  
     else res.status(200).json(WN8);
 });
 

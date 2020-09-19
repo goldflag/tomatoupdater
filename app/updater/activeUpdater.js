@@ -28,7 +28,8 @@ async function APIcall(idstr, index, idArr, time) {
 }
 //40000000
 function loop() {
-    const time = Date.now() - 1209600;
+    const time = Date.now()/1000 - 1209600;
+    console.log(time);
     console.log(`currentTime: ${Date.now()}`);
     let counter = 1000000000;
     //for (let i = 0; i <= 4100; i = i + 100) {

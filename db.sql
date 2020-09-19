@@ -87,18 +87,21 @@ CREATE TABLE devru (
     stats JSONB[]
 );
 
-
-CREATE TABLE test (
-    id serial NOT NULL PRIMARY KEY,
-    stats JSONB[]
+CREATE TABLE tank (
+    id serial NOT NULL,
+    tank_id INTEGER NOT NULL PRIMARY KEY, 
+    name TEXT NOT NULL, 
+    class TEXT NOT NULL, 
+    nation TEXT NOT NULL, 
+    tier INTEGER NOT NULL,
+    topDPGs VARCHAR(24)[],
+    topWRs VARCHAR(24)[],
+    topWN8s VARCHAR(24)[],
+    recentTopDPGs VARCHAR(24)[],
+    recentTopWRs VARCHAR(24)[],
+    recentTopWN8s VARCHAR(24)[],
+    
 );
-
-
-UPDATE test SET stats[2] = (
-    CASE WHEN stats[2] = '{}'::JSONB THEN stats[1]
-         ELSE stats[3]
-    END) WHERE id = 1;
-
     
 
 insert into test (player_id, timestamps, battlestamps, stats) VALUES (1500, ARRAY [2313], ARRAY [2332], '[ {"wins": 10} ]');
