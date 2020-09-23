@@ -87,23 +87,6 @@ CREATE TABLE devru (
     stats JSONB[]
 );
 
-CREATE TABLE tank (
-    id serial NOT NULL,
-    tank_id INTEGER NOT NULL PRIMARY KEY, 
-    name TEXT NOT NULL, 
-    class TEXT NOT NULL, 
-    nation TEXT NOT NULL, 
-    tier INTEGER NOT NULL,
-    topDPGs VARCHAR(24)[],
-    topWRs VARCHAR(24)[],
-    topWN8s VARCHAR(24)[],
-    recentTopDPGs VARCHAR(24)[],
-    recentTopWRs VARCHAR(24)[],
-    recentTopWN8s VARCHAR(24)[],
-    
-);
-    
-
 insert into test (player_id, timestamps, battlestamps, stats) VALUES (1500, ARRAY [2313], ARRAY [2332], '[ {"wins": 10} ]');
 
 
@@ -117,3 +100,131 @@ PGHOST=localhost
 PGPASSWORD=12345noob
 PGDATABASE=tomato
 PGPORT=5432
+
+CREATE TABLE tankStats (
+    id SERIAL NOT NULL,
+    server TEXT NOT NULL,
+    overall JSONB,
+    recent JSONB,
+)
+
+CREATE TABLE NAplayers (
+    id SERIAL NOT NULL,
+    player_id INTEGER PRIMARY KEY,
+    username VARCHAR(24) NOT NULL, 
+    WN8 INTEGER NOT NULL,
+    battles INTEGER NOT NULL,
+    wins INTEGER NOT NULL,
+    winrate REAL NOT NULL,
+    avgTier REAL NOT NULL,
+    MOEcount INTEGER NOT NULL,
+    MOE10 INTEGER NOT NULL,
+    MOE9 INTEGER NOT NULL,
+    MOE8 INTEGER NOT NULL,
+    MOE7 INTEGER NOT NULL,
+    MOe6 INTEGER NOT NULL,
+    MOE5 INTEGER NOT NULL
+);
+
+CREATE TABLE comIDs (
+    id SERIAL NOT NULL,
+    player_id INTEGER PRIMARY KEY
+);
+
+CREATE TABLE ActivecomIDs (
+    id SERIAL NOT NULL,
+    player_id INTEGER PRIMARY KEY
+);
+
+CREATE TABLE NA_tank (
+    id SERIAL NOT NULL,
+    player_id INTEGER NOT NULL,
+    username VARCHAR(24) NOT NULL, 
+    battles INTEGER NOT NULL,
+    wins INTEGER NOT NULL,
+    draws INTEGER NOT NULL,
+    damage INTEGER NOT NULL,
+    WN8 INTEGER NOT NULL,
+    frags INTEGER NOT NULL,
+    survived INTEGER NOT NULL,
+    cap INTEGER NOT NULL,
+    def INTEGER NOT NULL,
+    spots INTEGER NOT NULL,
+    XP INTEGER NOT NULL,
+    shots INTEGER NOT NULL,
+    hits INTEGER NOT NULL,
+    pens INTEGER NOT NULL,
+    HEhits INTEGER NOT NULL,
+    HEhitsRec INTEGER NOT NULL,
+    blocked INTEGER NOT NULL,
+    armorEff REAL NOT NULL,
+    MOE INTEGER NOT NULL,
+    Mastery INTEGER NOT NULL,
+
+    WR REAL NOT NULL,
+    DPG INTEGER NOT NULL,
+    avgFrags REAL NOT NULL,
+    avgSurvived REAL NOT NULL,
+    avgCap REAL NOT NULL,
+    avgDef REAL NOT NULL,
+    avgSpots REAL NOT NULL,
+    avgXP INTEGER NOT NULL,
+    avgShots REAL NOT NULL,
+    avgHits REAL NOT NULL,
+    avgPens REAL NOT NULL,
+    avgHEhits INTEGER NOT NULL,
+    avgHEhitsRec INTEGER NOT NULL,
+    avgBlocked INTEGER NOT NULL,
+    KDratio REAL NOT NULL, 
+    DMGratio REAL NOT NULL, 
+);
+
+
+    recBattles INTEGER NOT NULL,
+    recWN8 INTEGER NOT NULL,
+    recDPG INTEGER NOT NULL,
+    recAvgFrags REAL NOT NULL,
+    recAvgSurvived REAL NOT NULL,
+    recAvgCap REAL NOT NULL,
+    recAvgDef REAL NOT NULL,
+    recAvgSpots REAL NOT NULL,
+    recAvgXP INTEGER NOT NULL,
+    recAvgShots REAL NOT NULL,
+    recAvgHits REAL NOT NULL,
+    recAvgpens REAL NOT NULL,
+    recAvgHEhits INTEGER NOT NULL,
+    recAvgHEhitsRec INTEGER NOT NULL,
+    recAvgBlocked INTEGER NOT NULL,
+    recAvgArmorEff REAL NOT NULL,
+    recKDratio REAL NOT NULL, 
+    recDMGratio REAL NOT NULL, 
+
+"all": {
+    "spotted": 105,
+    "battles_on_stunning_vehicles": 0,
+    "avg_damage_blocked": 0,
+    "capture_points": 0,
+    "explosion_hits": 11,
+    "piercings": 310,
+    "xp": 42908,
+    "survived_battles": 8,
+    "dropped_capture_points": 1,
+    "damage_dealt": 72497,
+    "hits_percents": 69,
+    "draws": 0,
+    "battles": 52,
+    "damage_received": 43821,
+    "frags": 47,
+    "stun_number": 0,
+    "direct_hits_received": 162,
+    "stun_assisted_damage": 0,
+    "hits": 412,
+    "battle_avg_xp": 825,
+    "wins": 27,
+    "losses": 25,
+    "piercings_received": 148,
+    "no_damage_direct_hits_received": 9,
+    "shots": 593,
+    "explosion_hits_received": 20,
+    "tanking_factor": 0
+}

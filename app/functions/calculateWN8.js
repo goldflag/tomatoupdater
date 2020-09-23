@@ -1,5 +1,5 @@
-const tankNames = require('../data/tankNames.js');
-const WN8 = require('../data/wn8.js');
+const tankNames = require('../data/tankNames.json');
+const WN8 = require('../data/wn8.json');
 
 function WN8Final(rDAMAGE, rSPOT, rFRAG, rDEF, rWIN) {
     const rWINc    = Math.max(0,                          (rWIN    - 0.71) / (1 - 0.71) );

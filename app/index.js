@@ -4,11 +4,11 @@ const db = require("./db");
 const morgan = require("morgan");
 const cron = require("node-cron");
 const helmet = require('helmet');
-const async  = require('express-async-await')
-const fetch = require('node-fetch')
+const async  = require('express-async-await');
+const fetch = require('node-fetch');
 const { PerformanceObserver, performance } = require('perf_hooks');
-const tankNames = require('./data/tankNames.js');
-const WN8 = require('./data/wn8.js');
+const tankNames = require('./data/tankNames.json');
+const WN8 = require('./data/wn8.json');
 
 const app = express();
 
