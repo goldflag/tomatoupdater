@@ -1,4 +1,4 @@
-const tankNames = require('../data/tankNames.js');
+const tankNames = require('../data/tankNames.json');
 
 // compresses 100kb stats file into 7-8kb 
 function tankStatsCompression(stats, time, battles) {
