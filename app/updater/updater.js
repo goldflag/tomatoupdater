@@ -9,7 +9,7 @@ async function APIcall(count, id) {
 function playerUpdater() {
     let count = 1;
     // for (let i = 0; i < 178442; ++i) {
-    for (let i = 0; i < 178442; ++i) {
+    for (let i = 0; i < NAids.length(); ++i) {
         setTimeout(function () {
             console.log(`count: ${i} id: ${NAids[i + 0]}`);
             APIcall(count, NAids[i + 0]);
