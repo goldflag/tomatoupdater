@@ -35,8 +35,8 @@ app.use((req, res, next) => {
     next();
 });
 
-cron.schedule("10 5 * * *", function() {
-    console.log("Running NA Update at 1am");
+cron.schedule("0 4 * * *", function() {
+    console.log("Running NA Update at 12am");
     updater();
 });
 
