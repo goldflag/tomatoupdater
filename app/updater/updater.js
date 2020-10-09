@@ -3,7 +3,7 @@ const NAids = require('./NAids.json');
 
 async function APIcall(count, id) {
     // const res = await fetch(`http://localhost:5000/api/abcd/com/${id}`);
-    await fetch(`https://tomatoproxy${count}.herokuapp.com/abcd/com/${id}`);
+    await fetch(`https://tomatoserver${count}.herokuapp.com/abcd/com/${id}`);
 }
 
 function playerUpdater() {

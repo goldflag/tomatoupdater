@@ -77,6 +77,11 @@ app.get("/api/abcd/:file", async (req, res) => {
     else res.status(200).json(WN8);
 });
 
+app.get("/api/abcd/stats/tankstats", async (req, res) => {
+    const data = await db.query(`SELECT overall FROM serverstats WHERE server = 'com'`);
+    res.status(200).json(data.rows[0]);
+});
+
 app.get("/api/abcd/:server/:id", async (req, res) => {
     try {
         let currentTime = parseInt(Date.now()/60000);

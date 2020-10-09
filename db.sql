@@ -101,13 +101,27 @@ PGPASSWORD=12345noob
 PGDATABASE=tomato
 PGPORT=5432
 
+CREATE TABLE data (
+    id SERIAL NOT NULL,
+    type TEXT NOT NULL,
+    data JSONB
+);
+
+
+CREATE TABLE serverStats (
+    id SERIAL NOT NULL,
+    server TEXT NOT NULL,
+    overall JSONB,
+    recent JSONB
+);
+
+
 CREATE TABLE tankStats (
     id SERIAL NOT NULL,
     server TEXT NOT NULL,
     overall JSONB,
-    recent JSONB,
-)
-
+    recent JSONB
+);
 
 CREATE TABLE COM_player (
     id SERIAL NOT NULL,
