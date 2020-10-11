@@ -82,6 +82,17 @@ app.get("/api/abcd/stats/tankstats", async (req, res) => {
     res.status(200).json(data.rows[0]);
 });
 
+app.get("/api/abcd/leaderboards/:type/:count", async (req, res) => {
+    const types = ['wn8', 'winrate', 'battles', 'moecount', 'moe10'];
+    if (req.params.type in types) res.status(404).send('itsover');
+    else if (isNaN(req.params.count)) res.status(404).send('itsover num');
+    else {
+        console.log(req.params.type);
+        const data = await db.query(`SELECT rank() OVER (ORDER BY ${req.params.type} DESC)rank, username, wn8, winrate, battles, avgtier, moecount, moe10, player_id from com_player WHERE battles > 5000 LIMIT $1`, [req.params.count]);
+        res.status(200).json(data.rows);
+    }
+});
+
 app.get("/api/abcd/:server/:id", async (req, res) => {
     try {
         let currentTime = parseInt(Date.now()/60000);
