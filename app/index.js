@@ -93,6 +93,31 @@ app.get("/api/abcd/leaderboards/:type/:count", async (req, res) => {
     }
 });
 
+app.get("/api/abcd/leaderboards/custom/:type/:count/:mintier/:maxtier/:minbattles/:maxbattles/:minwn8/:maxwn8/:minwinrate/:maxwinrate", async (req, res) => {
+    const types = ['wn8', 'winrate', 'battles', 'moecount', 'moe10', 'pr'];
+    if (req.params.type in types) res.status(404).send('itsover');
+    else if (isNaN(req.params.count)) res.status(404).send('itsover num');
+    else {
+        console.log(req.params.type);
+
+        let querystr = `
+        SELECT rank() OVER (ORDER BY ${req.params.type} DESC)rank, 
+        username, wn8, winrate, battles, avgtier, moecount, moe10, player_id from com_player WHERE battles > 0`;
+        if (req.params.mintier != 1) querystr += ` AND avgtier > ${req.params.mintier}`
+        if (req.params.maxtier != 10) querystr += ` AND avgtier < ${req.params.maxtier}`
+        if (req.params.minbattles != 0) querystr += ` AND battles > ${req.params.minbattles}`
+        if (req.params.maxbattles != 999999) querystr += ` AND battles < ${req.params.maxbattles}`
+        if (req.params.minwn8 != 0) querystr += ` AND wn8 > ${req.params.minwn8}`
+        if (req.params.maxwn8 != 999999) querystr += ` AND wn8 < ${req.params.maxwn8}`
+        if (req.params.minwinrate != 0) querystr += ` AND winrate > ${req.params.minwinrate}`
+        if (req.params.maxwinrate != 100) querystr += ` AND winrate < ${req.params.maxwinrate}`
+
+        querystr += ` LIMIT ${req.params.count}`
+        const data = await db.query(querystr);
+        res.status(200).json(data.rows);
+    }
+});
+
 app.get("/api/abcd/:server/:id", async (req, res) => {
     try {
         let currentTime = parseInt(Date.now()/60000);
