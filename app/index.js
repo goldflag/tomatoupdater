@@ -38,7 +38,6 @@ app.use((req, res, next) => {
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`server is up on ${port}`);
-    updater("eu");
 });
 
 cron.schedule("0 2 * * *", function() {
@@ -51,15 +50,15 @@ cron.schedule("0 10 * * *", function() {
     updater("com");
 });
 
-cron.schedule("* * * * 1", function() {
-    console.log("Running Weekly EU IDs Update on Monday");
-    IDupdater("eu");
-});
+// cron.schedule("* * * * 1", function() {
+//     console.log("Running Weekly EU IDs Update on Monday");
+//     IDupdater("eu");
+// });
 
-cron.schedule("* * * * 0", function() {
-    console.log("Running Weekly NA IDs Update on Sunday");
-    IDupdater("com");
-});
+// cron.schedule("* * * * 0", function() {
+//     console.log("Running Weekly NA IDs Update on Sunday");
+//     IDupdater("com");
+// });
 
 /*
 There are 4 tables for the servers NA, EU, RU, and ASIA named devcom, deveu, devru, and devasia

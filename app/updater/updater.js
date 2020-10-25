@@ -25,7 +25,7 @@ async function playerUpdater(server) {
     async function APIcall(count, id) {
         // const res = await fetch(`http://localhost:5000/api/abcd/${server}/${id}`);
         console.log(id);
-        //await fetch(`https://tomatoserver${count}.herokuapp.com/abcd/${server}/${id}`);
+        await fetch(`https://tomatoserver${count}.herokuapp.com/abcd/${server}/${id}`);
     }
 }
 
