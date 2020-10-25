@@ -9,7 +9,6 @@ const fetch = require('node-fetch');
 const { PerformanceObserver, performance } = require('perf_hooks');
 const tankNames = require('./data/tankNames.json');
 const WN8 = require('./data/wn8.json');
-
 const app = express();
 
 //compresses tank stats into more readable form
@@ -20,7 +19,7 @@ const calculateWN8 = require('./functions/calculateWN8.js');
 const recentTime = require('./functions/RecentTime.js');
 //calculates snapshot index closest to certain num of battles
 const recentBattles = require('./functions/RecentBattles.js');
-const activeUpdater = require('./updater/activeUpdater.js');
+const IDupdater = require('./updater/IDupdater.js');
 //daily update of player stats
 const updater = require('./updater/updater.js');
 
@@ -35,16 +34,32 @@ app.use((req, res, next) => {
     next();
 });
 
-cron.schedule("0 4 * * *", function() {
-    console.log("Running NA Update at 12am");
-    updater();
+//default port is 5000
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+    console.log(`server is up on ${port}`);
+    updater("eu");
 });
 
+cron.schedule("0 2 * * *", function() {
+    console.log("Running Daily EU Update at 10pm EST");
+    updater("eu");
+});
 
-// cron.schedule("43 20 * * *", function() {
-//     console.log("Running Active Updater");
-//     activeUpdater();
-// });
+cron.schedule("0 10 * * *", function() {
+    console.log("Running Daily NA Update at 6am EST");
+    updater("com");
+});
+
+cron.schedule("* * * * 1", function() {
+    console.log("Running Weekly EU IDs Update on Monday");
+    IDupdater("eu");
+});
+
+cron.schedule("* * * * 0", function() {
+    console.log("Running Weekly NA IDs Update on Sunday");
+    IDupdater("com");
+});
 
 /*
 There are 4 tables for the servers NA, EU, RU, and ASIA named devcom, deveu, devru, and devasia
@@ -207,10 +222,15 @@ async function exitingPlayer(res, stats, data1, currentTime, server, id, exists,
     const timeArr = exists.rows[0].timestamps;
     const battlesArr = exists.rows[0].battlestamps;
     // returns the index of respective stats snapshots for each period
-    const index24hr = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 1440);
-    const index3days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 4320);
+    const index24hr = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 1740);
+    const index3days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 4720);
     const index1week = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 10800);
     const index30days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 43200);
+    // const index24hr = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 3500);
+    // const index3days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 4320);
+    // const index1week = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 12800);
+    // const index30days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 43200);
+
     const index1000 = recentBattles(exists.rows[0].stats, numEntries, compressedStats.battles, battlesArr, 1000);
     const index500 = recentBattles(exists.rows[0].stats, numEntries, compressedStats.battles, battlesArr, 100);
 
@@ -276,6 +296,11 @@ async function exitingPlayer(res, stats, data1, currentTime, server, id, exists,
         }
     }
 
+    console.log('index 24hr: ' + index24hr);
+    console.log('index 500: ' + index500);
+
+    console.log('timestamps ct: ' + exists.rows[0].timestamps.length);
+    console.log('timestamps: ' + exists.rows[0].timestamps);
     res.status(200).json({ 
         server: server,
         username: exists.rows[0].username,
@@ -290,12 +315,5 @@ async function exitingPlayer(res, stats, data1, currentTime, server, id, exists,
         recent500: exists.rows[0].stats[index500] || 'frog',
         // test: exists.rows[0].stats[exists.rows[0].stats.length - 1]
         test: exists.rows[0].stats
-
     });
 }
-
-//default port is 5000
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-    console.log(`server is up on ${port}`);
-});

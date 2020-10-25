@@ -1,4 +1,4 @@
-function recent24hr(stats, numEntries, currentTime, timeArr, offset) {
+function recentTime(stats, numEntries, currentTime, timeArr, offset) {
     let snapShotExists = false;
     for (let i = numEntries - 1; i >= 0; --i) {
         if (currentTime - timeArr[i] < offset*1.3) {
@@ -27,4 +27,4 @@ function recent24hr(stats, numEntries, currentTime, timeArr, offset) {
     return properIndex;
 }
 
-module.exports = recent24hr;
+module.exports = recentTime;

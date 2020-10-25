@@ -144,7 +144,13 @@ CREATE TABLE COM_player (
     AceCount SMALLINT NOT NULL
 );
 
-CREATE INDEX 
+CREATE TABLE IDs (
+    id SERIAL NOT NULL,
+    server VARCHAR(4) PRIMARY KEY NOT NULL,
+    size INTEGER NOT NULL,
+    ids integer[] NOT NULL
+);
+
 
 CREATE TABLE comIDs (
     id SERIAL NOT NULL,
@@ -155,6 +161,17 @@ CREATE TABLE ActivecomIDs (
     id SERIAL NOT NULL,
     player_id INTEGER PRIMARY KEY
 );
+
+CREATE TABLE euIDs (
+    id SERIAL NOT NULL,
+    player_id INTEGER PRIMARY KEY
+);
+
+CREATE TABLE ActiveeuIDs (
+    id SERIAL NOT NULL,
+    player_id INTEGER PRIMARY KEY
+);
+
 
 
 CREATE TABLE ONA.OTank_1 (
