@@ -138,6 +138,7 @@ app.get("/api/abcd/leaderboards/custom/:type/:count/:mintier/:maxtier/:minbattle
 
 app.get("/api/abcd/:server/:id", async (req, res) => {
     try {
+        await db.query(`UPDATE userCount SET count = count + 1 WHERE id = 1`);
         let currentTime = parseInt(Date.now()/60000);
         const server = req.params.server;
         const id = req.params.id;      

@@ -144,6 +144,12 @@ CREATE TABLE COM_player (
     AceCount SMALLINT NOT NULL
 );
 
+CREATE TABLE userCount (
+    id SERIAL NOT NULL,
+    count INTEGER NOT NULL
+);
+
+
 CREATE TABLE IDs (
     id SERIAL NOT NULL,
     server VARCHAR(4) PRIMARY KEY NOT NULL,
