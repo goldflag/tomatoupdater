@@ -44,7 +44,7 @@ cron.schedule("0 6 * * *", function() {
     updater("eu");
 });
 
-cron.schedule("3 4 * * *", function() {
+cron.schedule("6 4 * * *", function() {
     console.log("Running Daily NA Update at 11pm EST");
     updater("com");
 });
