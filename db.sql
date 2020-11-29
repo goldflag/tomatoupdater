@@ -149,6 +149,9 @@ CREATE TABLE userCount (
     count INTEGER NOT NULL
 );
 
+ALTER TABLE devcom ADD COLUMN sessions JSONB[];
+ALTER TABLE devcom ADD COLUMN lastSession JSONB;
+
 
 CREATE TABLE IDs (
     id SERIAL NOT NULL,

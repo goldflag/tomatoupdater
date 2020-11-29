@@ -12,11 +12,9 @@ function recentbattles(stats, numEntries, currentBattles, battlesArr, offset) {
     }
     let counter = 0;
     while (Object.keys(stats[properIndex]).length === 0) {
-        console.log(counter);
         counter++;
         properIndex--;
     }
-    console.log(`properinedx: ${properIndex}`);
     return properIndex;
 }
 

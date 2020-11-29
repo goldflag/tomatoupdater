@@ -3,7 +3,6 @@ const tankNames = require('../data/tankNames.json');
 // compresses 100kb stats file into 7-8kb 
 function tankStatsCompression(stats, time, battles) {
     let newStats = {
-        timestamp: parseInt(Date.now()/60000),
         tankStats: [], 
         time: time,
         battles: 0,

@@ -13,13 +13,13 @@ async function playerUpdater(server) {
 
     for (let i = 0; i < IDs.length; ++i) {
         setTimeout(function () {
-            console.log(`count: ${i} id: ${IDs[i + 0]}`);
+            // console.log(`count: ${i} id: ${IDs[i + 0]}`);
             APIcall(count, IDs[i + 0]);
             count++;
-            if (count == 10) {
+            if (count == 25) {
                 count = 1;
             }
-        }, i * 30);
+        }, i * 10);
     }
 
     async function APIcall(count, id) {

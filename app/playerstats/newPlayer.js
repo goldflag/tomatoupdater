@@ -2,9 +2,9 @@ const async  = require('express-async-await');
 const db = require("../db");
 //calculates wn8 of snapshot
 const calculateWN8 = require('../functions/calculateWN8.js');
+const calcOverall = require('../functions/calcOverall.js');
 
-
-async function newPlayer(res, id, stats, data1, currentTime, compressedStats, server, battles) {
+async function newPlayer(res, id, stats, data1, currentTime, compressedStats, server, battles, stats, moeData) {
     const WN8 = calculateWN8(stats);
     const winrate = (data1.data[id].statistics.all.wins/battles);
     const avgDamage = (data1.data[id].statistics.all.damage_dealt/battles);
@@ -27,6 +27,19 @@ async function newPlayer(res, id, stats, data1, currentTime, compressedStats, se
     const newLineIns = [newLine];
     const newPlayer = await db.query(`INSERT INTO dev${server} (player_id, username, numEntries, lastUpdate, timestamps, battlestamps, stats, linegraph) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning *`, 
         [id, username, 1, currentTime, timeArr, battlesArr, newEntry, newLineIns]);
+
+    
+    const recents = {
+        recent24hr: [],
+        recent3days: [],
+        recent7days: [],
+        recent30days: [],
+        recent60days: [],
+        recent1000: [],
+        recent100: [],
+    }
+
+    const overallStats = calcOverall(stats, moeData);
     res.status(200).json({ 
         status: 'success', 
         overall: 'frog',
@@ -37,6 +50,9 @@ async function newPlayer(res, id, stats, data1, currentTime, compressedStats, se
         recent60days: 'frog', 
         recent1000: 'frog',
         recent500: 'frog',
+        overallStats: overallStats,
+        sessions: [],
+        recents: recents
     });  
 }
 

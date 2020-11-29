@@ -13,12 +13,7 @@ const app = express();
 
 //compresses tank stats into more readable form
 const tankStatsCompression = require('./functions/tankStatsCompression.js');
-//calculates wn8 of snapshot
-const calculateWN8 = require('./functions/calculateWN8.js');
-//calculates snapshot index closest to certain time
-const recentTime = require('./functions/RecentTime.js');
-//calculates snapshot index closest to certain num of battles
-const recentBattles = require('./functions/RecentBattles.js');
+
 const IDupdater = require('./updater/IDupdater.js');
 //daily update of player stats
 const updater = require('./updater/updater.js');
@@ -44,13 +39,13 @@ app.listen(port, () => {
     console.log(`server is up on ${port}`);
 });
 
-cron.schedule("0 2 * * *", function() {
-    console.log("Running Daily EU Update at 10pm EST");
+cron.schedule("0 5 * * *", function() {
+    console.log("Running Daily EU Update at 1am EST");
     updater("eu");
 });
 
-cron.schedule("0 10 * * *", function() {
-    console.log("Running Daily NA Update at 6am EST");
+cron.schedule("0 3 * * *", function() {
+    console.log("Running Daily NA Update at 11pm EST");
     updater("com");
 });
 
@@ -147,38 +142,33 @@ app.get("/api/abcd/:server/:id", async (req, res) => {
         let stats = {};
         let data1;
         let data2;
+        let data3;
+
         await Promise.all([
             fetch(`https://api.worldoftanks.${server}/wot/account/info/?application_id=${APIKey}&account_id=${id}`),
             fetch(`https://api.worldoftanks.${server}/wot/tanks/stats/?application_id=${APIKey}&account_id=${id}&fields=mark_of_mastery%2C+tank_id%2C+all`),
+            fetch(`https://api.worldoftanks.${server}/wot/tanks/achievements/?application_id=${APIKey}&account_id=${id}&fields=achievements%2C+tank_id`)
         ])
-        .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
-        .then(([d1, d2]) => 
+        .then(([res1, res2, res3]) => Promise.all([res1.json(), res2.json(), res3.json()]))
+        .then(([d1, d2, d3]) => 
         {
             data1 = d1;
             data2 = d2;
+            data3 = d3;
         });
         //number of battles overall an account has
         battles = data1.data[id].statistics.all.battles;
         if (battles > 0) {
             //array of overall tank stats
             stats = data2.data[id];
-
-            var t0 = performance.now()
             // compresses stats file to save storage space. Also calculates accurate total battles
             const compressedStats = tankStatsCompression(stats, currentTime, battles);
-            var t1 = performance.now()
-            //console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
-
             const exists = await db.query(`SELECT * FROM dev${server} WHERE player_id = $1`, [id]);
             console.log(currentTime + ' ID: ' + id);
             // if player isn't already in the database, add to database and return empty stats
-            if (!exists.rows[0]) {
-                newPlayer(res, id, stats, data1, currentTime, compressedStats, server, battles);           
-            }
+            if (!exists.rows[0]) newPlayer(res, id, stats, data1, currentTime, compressedStats, server, battles, stats, data3.data[id]);           
             // if player already exists in database, return recent stats
-            else {
-                existingPlayer(res, stats, data1, currentTime, server, id, exists, compressedStats, battles); 
-            }   
+            else existingPlayer(res, currentTime, server, id, exists, compressedStats, stats, data3.data[id]); 
         }
     } catch(err) {
         console.log(err);

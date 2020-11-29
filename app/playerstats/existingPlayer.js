@@ -4,8 +4,14 @@ const db = require("../db");
 const recentTime = require('../functions/RecentTime.js');
 //calculates snapshot index closest to certain num of battles
 const recentBattles = require('../functions/RecentBattles.js');
+//calculates session log array
+const sessionstats = require('../functions/sessionstats.js');
+//calculates overall stats
+const calcOverall = require('../functions/calcOverall.js');
+//calculates recent stats
+const calcRecents = require('../functions/calcRecents.js');
 
-async function existingPlayer(res, stats, data1, currentTime, server, id, exists, compressedStats, battles) {
+async function existingPlayer(res, currentTime, server, id, exists, compressedStats, stats, moeData) {
     const numEntries = exists.rows[0].numentries;
     const timeArr = exists.rows[0].timestamps;
     const battlesArr = exists.rows[0].battlestamps;
@@ -14,10 +20,7 @@ async function existingPlayer(res, stats, data1, currentTime, server, id, exists
     const index3days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 4720);
     const index1week = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 10800);
     const index30days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 43200);
-    // const index24hr = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 3500);
-    // const index3days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 4320);
-    // const index1week = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 12800);
-    // const index30days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 43200);
+    const index60days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 86400);
 
     const index1000 = recentBattles(exists.rows[0].stats, numEntries, compressedStats.battles, battlesArr, 1000);
     const index500 = recentBattles(exists.rows[0].stats, numEntries, compressedStats.battles, battlesArr, 100);
@@ -34,28 +37,12 @@ async function existingPlayer(res, stats, data1, currentTime, server, id, exists
         await db.query(
             `UPDATE dev${server} SET 
             numEntries = numEntries + 1, 
-            lastUpdate = $2,
             timestamps = array_append(timestamps, $2),
             battlestamps = array_append(battlestamps, $3),
             stats = array_append(stats, $4)
             WHERE player_id = $1`,
             [id, currentTime, numBattles, newCompressed]);
         }
-    // if (compressedStats.battles - battlesArr[battlesArr.length - 1] > 10) {
-    //     const WN8 = calculateWN8(stats);
-    //     //console.log(`wn8: ${WN8}`);
-    //     const winrate = (data1.data[id].statistics.all.wins/battles);
-    //     //console.log(`winrate: ${winrate}`);
-    //     const avgDamage = (data1.data[id].statistics.all.damage_dealt/battles);
-    //     //console.log(`avgDamage: ${avgDamage}`);
-    //     const newLineIns = JSON.stringify([
-    //         battles,
-    //         WN8,
-    //         winrate,
-    //         avgDamage
-    //     ]);
-    //     await db.query(`UPDATE dev${server} SET linegraph = array_append(linegraph, $2) WHERE player_id = $1`, [id, newLineIns])
-    // }
     // Removes oldest snapshot if it is more than 180 days old
     if (currentTime - timeArr[0] > 259200) {
         console.log('delete old data');
@@ -84,11 +71,25 @@ async function existingPlayer(res, stats, data1, currentTime, server, id, exists
         }
     }
 
-    console.log('index 24hr: ' + index24hr);
-    console.log('index 500: ' + index500);
+    // console.log('index 24hr: ' + index24hr);
+    // console.log('index 500: ' + index500);
+    // console.log('timestamps ct: ' + exists.rows[0].timestamps.length);
+    // console.log('timestamps: ' + exists.rows[0].timestamps);
 
-    console.log('timestamps ct: ' + exists.rows[0].timestamps.length);
-    console.log('timestamps: ' + exists.rows[0].timestamps);
+    // console.log(calcRecents(exists.rows[0].stats[index1week], exists.rows[0].stats[index1week + 3]));
+    const sessions = sessionstats(exists.rows[0].stats, exists.rows[0].stats.length);
+    const overallStats = calcOverall(stats, moeData);
+
+    const recents = {
+        recent24hr: calcRecents(exists.rows[0].stats[index24hr], compressedStats),
+        recent3days: calcRecents(exists.rows[0].stats[index3days], compressedStats),
+        recent7days: calcRecents(exists.rows[0].stats[index1week], compressedStats),
+        recent30days: calcRecents(exists.rows[0].stats[index30days], compressedStats),
+        recent60days: calcRecents(exists.rows[0].stats[index60days], compressedStats),
+        recent1000: calcRecents(exists.rows[0].stats[index1000], compressedStats),
+        recent100: calcRecents(exists.rows[0].stats[index500], compressedStats),
+    }
+
     res.status(200).json({ 
         server: server,
         username: exists.rows[0].username,
@@ -101,8 +102,9 @@ async function existingPlayer(res, stats, data1, currentTime, server, id, exists
         recent60days: exists.rows[0].stats[index30days] || 'frog',
         recent1000: exists.rows[0].stats[index1000] || 'frog',
         recent500: exists.rows[0].stats[index500] || 'frog',
-        // test: exists.rows[0].stats[exists.rows[0].stats.length - 1]
-        test: exists.rows[0].stats
+        overallStats: overallStats,
+        sessions: sessions,
+        recents: recents
     });
 }
 
