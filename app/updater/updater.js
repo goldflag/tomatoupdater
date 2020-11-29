@@ -19,7 +19,7 @@ async function playerUpdater(server) {
             if (count == 25) {
                 count = 1;
             }
-        }, i * 10);
+        }, i * 50);
     }
 
     async function APIcall(count, id) {
