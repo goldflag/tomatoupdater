@@ -51,11 +51,18 @@ function calculateRecents(statsSnapshot, overall) {
         xp: overall.xp - statsSnapshot.xp,
         tankStats: [],
         raw: [],
+        radar: {
+            "rDAMAGE" : 0,
+            "rSPOT" : 0,
+            "rFRAG" : 0,
+            "rDEF" : 0,
+            "rWIN" : 0
+        },
         time: statsSnapshot.time,
         date: statsSnapshot.date
     };
 
-    const overallWN8 = parseInt(calculatePeriodWN8(overall.tankStats, statsSnapshot.tankStats));
+    const overallWN8 = parseInt(calculatePeriodWN8(overall.tankStats, statsSnapshot.tankStats, calculatedStats.radar));
     calculatedStats.overallWN8 = overallWN8;
     let index = 0;
     overall.tankStats.map((row) => {
@@ -166,7 +173,7 @@ function calculateRecents(statsSnapshot, overall) {
     return calculatedStats;
 }
 
-function calculatePeriodWN8(overall, historical) {
+function calculatePeriodWN8(overall, historical, radar) {
     let weighedExpDamage = 0, weighedExpSpots = 0, weighedExpFrag = 0, weighedExpDef = 0, weighedExpWinrate = 0;
     let weighedDamage = 0, weighedSpots = 0, weighedFrag = 0, weighedDef = 0, weighedWinrate = 0;
 
@@ -208,6 +215,12 @@ function calculatePeriodWN8(overall, historical) {
     const rDEF    = weighedDef    / weighedExpDef;
     const rWIN    = weighedWinrate   / weighedExpWinrate;
 
+    radar.rDAMAGE = (weighedDamage/weighedExpDamage).toFixed(2);
+    radar.rSPOT = (weighedSpots/weighedExpSpots).toFixed(2);
+    radar.rFRAG = (weighedFrag/weighedExpFrag).toFixed(2);
+    radar.rDEF = (weighedDef/weighedExpDef).toFixed(2);
+    radar.rWIN = (weighedWinrate/weighedExpWinrate).toFixed(2);
+
     return WN8Final(rDAMAGE, rSPOT, rFRAG, rDEF, rWIN);
 }
 
@@ -242,7 +255,10 @@ function zeroBattles(stats) {
             xprate: '-',
             KD: '-',
             DMGratio: '-',
-            tankStats: []
+            tankStats: [],
+            raw: [],
+            time: 0,
+            date: 0
         };
     }
     else {

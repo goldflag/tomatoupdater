@@ -82,6 +82,13 @@ function calcOverall(stats, MOEstats) {
             { 'stat': "rWIN", 'player': 0 }
         ],
         tankWN8: [],
+        radar: {
+            "rDAMAGE" : 0,
+            "rSPOT" : 0,
+            "rFRAG" : 0,
+            "rDEF" : 0,
+            "rWIN" : 0
+        },
     };
 
     stats.map((row) => {
@@ -138,6 +145,13 @@ function calcOverall(stats, MOEstats) {
     );
     jsonStats.overallWN8 = calculateOverallWN8();
     jsonStats.avgTier /= jsonStats.battles;
+
+    jsonStats.radar.rDAMAGE = (weighedDamage/weighedExpDamage).toFixed(2);
+    jsonStats.radar.rSPOT = (weighedSpots/weighedExpSpots).toFixed(2);
+    jsonStats.radar.rFRAG = (weighedFrag/weighedExpFrag).toFixed(2);
+    jsonStats.radar.rDEF = (weighedDef/weighedExpDef).toFixed(2);
+    jsonStats.radar.rWIN = (weighedWinrate/weighedExpWinrate).toFixed(2);
+
     return jsonStats;
 }
 
