@@ -42,14 +42,14 @@ async function newPlayer(res, id, stats, data1, currentTime, compressedStats, se
     const overallStats = calcOverall(stats, moeData);
     res.status(200).json({ 
         status: 'success', 
-        overall: compressedStats,
         linegraph: [],
-        recent24hr: 'frog',
-        recent1week: 'frog',
-        recent30days: 'frog',
-        recent60days: 'frog', 
-        recent1000: 'frog',
-        recent500: 'frog',
+        overall: compressedStats,
+        // recent24hr: 'frog',
+        // recent1week: 'frog',
+        // recent30days: 'frog',
+        // recent60days: 'frog', 
+        // recent1000: 'frog',
+        // recent500: 'frog',
         overallStats: overallStats,
         sessions: [],
         recents: recents

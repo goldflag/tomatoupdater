@@ -96,12 +96,6 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
         status: 'success', 
         linegraph: exists.rows[0].linegraph,
         overall: compressedStats,
-        recent24hr: exists.rows[0].stats[index24hr] || 'frog',
-        recent1week: exists.rows[0].stats[index3days] || 'frog',
-        recent30days: exists.rows[0].stats[index1week] || 'frog',
-        recent60days: exists.rows[0].stats[index30days] || 'frog',
-        recent1000: exists.rows[0].stats[index1000] || 'frog',
-        recent500: exists.rows[0].stats[index500] || 'frog',
         overallStats: overallStats,
         sessions: sessions,
         recents: recents
