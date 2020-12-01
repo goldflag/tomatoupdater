@@ -80,6 +80,9 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
     const sessions = sessionstats(exists.rows[0].stats, exists.rows[0].stats.length);
     const overallStats = calcOverall(stats, moeData);
 
+
+    //console.log(exists.rows[0].stats[index24hr]);
+
     const recents = {
         recent24hr: calcRecents(exists.rows[0].stats[index24hr], compressedStats),
         recent3days: calcRecents(exists.rows[0].stats[index3days], compressedStats),

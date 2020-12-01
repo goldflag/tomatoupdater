@@ -257,6 +257,13 @@ function zeroBattles(stats) {
             DMGratio: '-',
             tankStats: [],
             raw: [],
+            radar: {
+                "rDAMAGE" : 0,
+                "rSPOT" : 0,
+                "rFRAG" : 0,
+                "rDEF" : 0,
+                "rWIN" : 0
+            },
             time: 0,
             date: 0
         };
