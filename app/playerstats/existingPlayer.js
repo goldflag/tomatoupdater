@@ -27,22 +27,22 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
 
     console.log('battles dif: ' + (compressedStats.battles - battlesArr[battlesArr.length - 1]));
     // Only updates stats if account has played at least one game since last snapshot
-    if ((compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) || (currentTime - timeArr[timeArr.length - 1] > 360)) {
-        console.log(`update happens battles passed:  ${compressedStats.battles - battlesArr[battlesArr.length - 1]} time:  ${currentTime - timeArr[timeArr.length - 1]}`);
-        const numBattles = compressedStats.battles;
-        let newCompressed = compressedStats;
-        if (compressedStats.battles - battlesArr[battlesArr.length - 1] === 0) {
-            newCompressed = {};
-        }
-        await db.query(
-            `UPDATE dev${server} SET 
-            numEntries = numEntries + 1, 
-            timestamps = array_append(timestamps, $2),
-            battlestamps = array_append(battlestamps, $3),
-            stats = array_append(stats, $4)
-            WHERE player_id = $1`,
-            [id, currentTime, numBattles, newCompressed]);
-        }
+    // if ((compressedStats.battles - battlesArr[battlesArr.length - 1] > 0) || (currentTime - timeArr[timeArr.length - 1] > 360)) {
+    //     console.log(`update happens battles passed:  ${compressedStats.battles - battlesArr[battlesArr.length - 1]} time:  ${currentTime - timeArr[timeArr.length - 1]}`);
+    //     const numBattles = compressedStats.battles;
+    //     let newCompressed = compressedStats;
+    //     if (compressedStats.battles - battlesArr[battlesArr.length - 1] === 0) {
+    //         newCompressed = {};
+    //     }
+    //     await db.query(
+    //         `UPDATE dev${server} SET 
+    //         numEntries = numEntries + 1, 
+    //         timestamps = array_append(timestamps, $2),
+    //         battlestamps = array_append(battlestamps, $3),
+    //         stats = array_append(stats, $4)
+    //         WHERE player_id = $1`,
+    //         [id, currentTime, numBattles, newCompressed]);
+    //     }
     // Removes oldest snapshot if it is more than 180 days old
     if (currentTime - timeArr[0] > 259200) {
         console.log('delete old data');
@@ -80,17 +80,15 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
     const sessions = sessionstats(exists.rows[0].stats, exists.rows[0].stats.length);
     const overallStats = calcOverall(stats, moeData);
 
-
     //console.log(exists.rows[0].stats[index24hr]);
-
     const recents = {
-        recent24hr: calcRecents(exists.rows[0].stats[index24hr], compressedStats),
-        recent3days: calcRecents(exists.rows[0].stats[index3days], compressedStats),
-        recent7days: calcRecents(exists.rows[0].stats[index1week], compressedStats),
-        recent30days: calcRecents(exists.rows[0].stats[index30days], compressedStats),
-        recent60days: calcRecents(exists.rows[0].stats[index60days], compressedStats),
-        recent1000: calcRecents(exists.rows[0].stats[index1000], compressedStats),
-        recent100: calcRecents(exists.rows[0].stats[index500], compressedStats),
+        recent24hr: calcRecents(exists.rows[0].stats[index24hr] || compressedStats, compressedStats),
+        recent3days: calcRecents(exists.rows[0].stats[index3days] || compressedStats, compressedStats),
+        recent7days: calcRecents(exists.rows[0].stats[index1week] || compressedStats, compressedStats),
+        recent30days: calcRecents(exists.rows[0].stats[index30days] || compressedStats, compressedStats),
+        recent60days: calcRecents(exists.rows[0].stats[index60days] || compressedStats, compressedStats),
+        recent1000: calcRecents(exists.rows[0].stats[index1000] || compressedStats, compressedStats),
+        recent100: calcRecents(exists.rows[0].stats[index500] || compressedStats, compressedStats),
     }
 
     res.status(200).json({ 
