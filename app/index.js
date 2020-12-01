@@ -39,7 +39,7 @@ app.listen(port, () => {
     console.log(`server is up on ${port}`);
 });
 
-cron.schedule("12 4 * * *", function() {
+cron.schedule("27 4 * * *", function() {
     console.log("Running Daily EU Update at 11:20pm EST");
     updater("eu");
 });
