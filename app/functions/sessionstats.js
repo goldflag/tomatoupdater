@@ -6,11 +6,6 @@ function sessionstats(stats, num) {
     for (let i = num - 1; i >= 0; --i) {
         if ('date' in stats[i]) {
             prunedStats.push(stats[i]);
-            //console.log(stats[i]);
-            console.log('f');
-        }
-        if (stats[i].tankStats) {
-            // prunedStats.push(stats[i]);
         }
     }
     let sessions = [];
