@@ -6,7 +6,6 @@ function recentTime(stats, numEntries, currentTime, timeArr, offset) {
         }
     }
     if (!snapShotExists) return 'none';
-    //a day is 1440 minutes long
     let margin = offset; 
     let properIndex = 0;
 
@@ -20,10 +19,11 @@ function recentTime(stats, numEntries, currentTime, timeArr, offset) {
     }
     let counter = 0;
     while (Object.keys(stats[properIndex]).length === 0) {
-        //console.log(counter);
+        console.log(counter);
         counter++;
         properIndex--;
     }
+    console.log("properindex: " + properIndex)
     return properIndex;
 }
 

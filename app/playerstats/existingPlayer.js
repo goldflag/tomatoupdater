@@ -16,7 +16,8 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
     const timeArr = exists.rows[0].timestamps;
     const battlesArr = exists.rows[0].battlestamps;
     // returns the index of respective stats snapshots for each period
-    const index24hr = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 1740);
+    const index24hr = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 2800);
+    console.log(index24hr);
     const index3days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 4720);
     const index1week = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 10800);
     const index30days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 43200);
@@ -43,8 +44,8 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
                 stats = array_append(stats, $4)
                 WHERE player_id = $1`,
                 [id, currentTime, numBattles, newCompressed]);
-            }
         }
+    }
     // Removes oldest snapshot if it is more than 180 days old
     if (currentTime - timeArr[0] > 259200) {
         console.log('delete old data');
@@ -93,6 +94,7 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
         recent100: calcRecents(exists.rows[0].stats[index500] || compressedStats, compressedStats),
     }
 
+    // console.log(calcRecents(exists.rows[0].stats[index24hr] || compressedStats, compressedStats));
     res.status(200).json({ 
         server: server,
         username: exists.rows[0].username,
@@ -101,7 +103,8 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
         overall: compressedStats,
         overallStats: overallStats,
         sessions: sessions,
-        recents: recents
+        recents: recents, 
+        test: exists.rows[0].stats[index24hr]
     });
 }
 

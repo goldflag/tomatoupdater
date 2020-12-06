@@ -1,6 +1,4 @@
 function recentbattles(stats, numEntries, currentBattles, battlesArr, offset) {
-    console.log(offset);
-
     let margin = offset; 
     let properIndex = 0;
     for (let i = numEntries - 1; i >= 0; --i) {

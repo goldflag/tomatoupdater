@@ -49,15 +49,15 @@ cron.schedule("0 10 * * *", function() {
     updater("com");
 });
 
-cron.schedule("21 20 * * Thursday", function() {
-    console.log("Running Weekly EU IDs Update on Thursday");
-    IDupdater("eu");
-});
+// cron.schedule("21 20 * * Thursday", function() {
+//     console.log("Running Weekly EU IDs Update on Thursday");
+//     IDupdater("eu");
+// });
 
-cron.schedule("32 20 * * Wednesday", function() {
-    console.log("Running Weekly NA IDs Update on Wednesday");
-    IDupdater("com");
-});
+// cron.schedule("32 20 * * Wednesday", function() {
+//     console.log("Running Weekly NA IDs Update on Wednesday");
+//     IDupdater("com");
+// });
 
 /*
 There are 4 tables for the servers NA, EU, RU, and ASIA named devcom, deveu, devru, and devasia
