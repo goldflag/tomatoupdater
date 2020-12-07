@@ -33,7 +33,7 @@ function calculateRecents(statsSnapshot, overall) {
     //the historical snapshot
     let snapshotTanks = statsSnapshot.tankStats;
     let calculatedStats = {
-        battles: 0,
+        battles: overall.battles - statsSnapshot.battles,
         tankcount: 0,
         tier: overall.tier - statsSnapshot.tier,
         overallWN8: 0,
@@ -103,7 +103,7 @@ function calculateRecents(statsSnapshot, overall) {
             };
             calculatedStats.tankStats.push(vehicleRecentStats);
             calculatedStats.raw.push(raw);
-            calculatedStats.battles += row[1];
+            // calculatedStats.battles += row[1];
             calculatedStats.tankcount++;
         }
         else {
@@ -163,7 +163,7 @@ function calculateRecents(statsSnapshot, overall) {
                 };
                 calculatedStats.tankStats.push(vehicleRecentStats);
                 calculatedStats.raw.push(raw);
-                calculatedStats.battles += battlesDiff;
+                // calculatedStats.battles += battlesDiff;
                 calculatedStats.tankcount++;
             }
             ++index;
