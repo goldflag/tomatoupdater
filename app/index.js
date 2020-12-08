@@ -40,18 +40,18 @@ app.listen(port, () => {
 });
 
 
-// cron.schedule("49 14 * * *", function() {
-//     console.log("Running Daily NA Update at 5AM EST");
+// cron.schedule("27 4 * * *", function() {
+//     console.log("Running Daily EU Update at 11:20pm EST");
 //     updater("eu");
 // });
 
-cron.schedule("27 4 * * *", function() {
+cron.schedule("23 6 * * *", function() {
     console.log("Running Daily EU Update at 11:20pm EST");
     updater("eu");
 });
 
-cron.schedule("0 10 * * *", function() {
-    console.log("Running Daily NA Update at 5AM EST");
+cron.schedule("0 12 * * *", function() {
+    console.log("Running Daily NA Update at 7AM EST");
     updater("com");
 });
 
