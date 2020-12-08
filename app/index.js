@@ -45,7 +45,7 @@ app.listen(port, () => {
 //     updater("eu");
 // });
 
-cron.schedule("23 6 * * *", function() {
+cron.schedule("24 6 * * *", function() {
     console.log("Running Daily EU Update at 11:20pm EST");
     updater("eu");
 });
