@@ -10,6 +10,7 @@ async function playerUpdater(server) {
     else IDs = await db.query(`SELECT ids FROM ids WHERE server = 'eu'`); 
     IDs = IDs.rows[0].ids;
     console.log(IDs);
+    console.log(IDs.length);
 
     for (let i = 0; i < IDs.length; ++i) {
         setTimeout(function () {
