@@ -45,12 +45,12 @@ app.listen(port, () => {
 //     updater("eu");
 // });
 
-// cron.schedule("24 6 * * *", function() {
-//     console.log("Running Daily EU Update at 11:20pm EST");
-//     updater("eu");
-// });
+cron.schedule("30 10 * * *", function() {
+    console.log("Running Daily EU Update at 11:20pm EST");
+    updater("eu");
+});
 
-cron.schedule("0 8 * * *", function() {
+cron.schedule("0 4 * * *", function() {
     console.log("Running Daily NA Update at 7AM EST");
     updater("com");
 });
