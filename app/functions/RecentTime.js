@@ -1,7 +1,7 @@
 function recentTime(stats, numEntries, currentTime, timeArr, offset) {
     let snapShotExists = false;
     for (let i = numEntries - 1; i >= 0; --i) {
-        if (currentTime - timeArr[i] < offset*1.3) {
+        if (currentTime - timeArr[i] < offset*1.2) {
             snapShotExists = true;
         }
     }
