@@ -17,10 +17,10 @@ async function playerUpdater(server) {
             // console.log(`count: ${i} id: ${IDs[i + 0]}`);
             APIcall(count, IDs[i + 0]);
             count++;
-            if (count == 20) {
+            if (count == 21) {
                 count = 1;
             }
-        }, i * 20);
+        }, i * 21);
     }
 
     async function APIcall(count, id) {
