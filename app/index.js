@@ -39,16 +39,20 @@ app.listen(port, () => {
     console.log(`server is up on ${port}`);
 });
 
-
-cron.schedule("30 11 * * *", function() {
+app.get("/test", async (req, res) => {
     console.log("Running Daily EU Update at 11:20pm EST");
     updater("eu");
 });
 
-cron.schedule("0 5 * * *", function() {
-    console.log("Running Daily NA Update at 7AM EST");
-    updater("com");
-});
+// cron.schedule("30 11 * * *", function() {
+//     console.log("Running Daily EU Update at 11:20pm EST");
+//     updater("eu");
+// });
+
+// cron.schedule("0 5 * * *", function() {
+//     console.log("Running Daily NA Update at 7AM EST");
+//     updater("com");
+// });
 
 // cron.schedule("21 20 * * Thursday", function() {
 //     console.log("Running Weekly EU IDs Update on Thursday");

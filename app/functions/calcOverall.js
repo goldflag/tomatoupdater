@@ -16,7 +16,6 @@ function WN8Final(rDAMAGE, rSPOT, rFRAG, rDEF, rWIN) {
 }
 
 function calculateWN8(id, avgDamage, avgDef, avgFrag, avgSpots, winrate) {
-    console.log(id);
     const exp = WN8[id];
     const rDAMAGE = avgDamage / exp.expDamage;
     const rSPOT   = avgSpots  / exp.expSpot;
