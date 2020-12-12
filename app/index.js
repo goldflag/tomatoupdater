@@ -44,12 +44,12 @@ app.get("/test", async (req, res) => {
     updater("eu");
 });
 
-cron.schedule("17 0 * * *", function() {
+cron.schedule("50 0 * * *", function() {
     console.log("Running Daily EU Update at 10:00pm EST");
     updater("eu");
 });
 
-cron.schedule("0 7 * * *", function() {
+cron.schedule("20 7 * * *", function() {
     console.log("Running Daily NA Update at 6AM EST");
     updater("com");
 });
