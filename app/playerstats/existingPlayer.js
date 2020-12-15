@@ -16,9 +16,9 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
     const timeArr = exists.rows[0].timestamps;
     const battlesArr = exists.rows[0].battlestamps;
     // returns the index of respective stats snapshots for each period
-    const index24hr = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 1440);
+    const index24hr = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 1800);
     console.log(index24hr);
-    const index3days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 4320);
+    const index3days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 4720);
     const index1week = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 10800);
     const index30days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 43200);
     const index60days = recentTime(exists.rows[0].stats, numEntries, currentTime, timeArr, 86400);
