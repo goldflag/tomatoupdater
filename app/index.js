@@ -13,15 +13,12 @@ const app = express();
 
 //compresses tank stats into more readable form
 const tankStatsCompression = require('./functions/tankStatsCompression.js');
-
 const IDupdater = require('./updater/IDupdater.js');
 //daily update of player stats
 const updater = require('./updater/updater.js');
-
 const newPlayer = require('./playerstats/newPlayer.js');
 const existingPlayer = require('./playerstats/existingPlayer.js')
-
-// const updateFiles = require('./functions/updateFiles.js')
+const updateFiles = require('./functions/updateFiles.js')
 
 const APIKey = process.env.API_KEY;
 
@@ -40,30 +37,25 @@ app.listen(port, () => {
     console.log(`server is up on ${port}`);
 });
 
-// app.get("/updateFiles", async (req, res) => {
-//     updateFiles();
-// });
-
-cron.schedule("39 23 * * *", function() {
-    console.log(`===============FUCK================
-    
-    DSFDS
-    FDSSSSSSSSSS
-    
-    
-    FSD
-    
-    FDS
-    F
-    SDF
-    SD
-    F
-    SDF
-    SDF`);
+app.get("/api/abcd/:file", async (req, res) => {
+    if (req.params.file === 'tankNames') res.status(200).json(tankNames);  
+    else res.status(200).json(WN8);
 });
 
+cron.schedule("20 0 * * *", function() {
+    console.log(`=================
+    ================
+    ==============
+    
+    
+    
+    
+    
+    
+    ============`);
+});
 
-cron.schedule("40 23 * * *", function() {
+cron.schedule("21 0 * * *", function() {
     console.log("Running Daily EU Update at 10:30pm EST");
     updater("eu");
 });
