@@ -21,7 +21,7 @@ const updater = require('./updater/updater.js');
 const newPlayer = require('./playerstats/newPlayer.js');
 const existingPlayer = require('./playerstats/existingPlayer.js')
 
-const updateFiles = require('./functions/updateFiles.js')
+// const updateFiles = require('./functions/updateFiles.js')
 
 const APIKey = process.env.API_KEY;
 
@@ -40,16 +40,35 @@ app.listen(port, () => {
     console.log(`server is up on ${port}`);
 });
 
-app.get("/updateFiles", async (req, res) => {
-    updateFiles();
+// app.get("/updateFiles", async (req, res) => {
+//     updateFiles();
+// });
+
+cron.schedule("39 23 * * *", function() {
+    console.log(`===============FUCK================
+    
+    DSFDS
+    FDSSSSSSSSSS
+    
+    
+    FSD
+    
+    FDS
+    F
+    SDF
+    SD
+    F
+    SDF
+    SDF`);
 });
 
-cron.schedule("30 22 * * *", function() {
+
+cron.schedule("40 23 * * *", function() {
     console.log("Running Daily EU Update at 10:30pm EST");
     updater("eu");
 });
 
-cron.schedule("0 6 * * *", function() {
+cron.schedule("0 7 * * *", function() {
     console.log("Running Daily NA Update at 6AM EST");
     updater("com");
 });

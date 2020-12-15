@@ -80,7 +80,10 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
     // console.log('timestamps: ' + exists.rows[0].timestamps);
 
     // console.log(calcRecents(exists.rows[0].stats[index1week], exists.rows[0].stats[index1week + 3]));
+    // const sessions = sessionstats(exists.rows[0].stats, exists.rows[0].stats.length);
+
     const sessions = sessionstats(exists.rows[0].stats, exists.rows[0].stats.length);
+
     const overallStats = calcOverall(stats, moeData);
 
     //console.log(exists.rows[0].stats[index24hr]);

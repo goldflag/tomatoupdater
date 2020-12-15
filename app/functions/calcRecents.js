@@ -23,7 +23,7 @@ function calculateWN8(id, avgDamage, avgDef, avgFrag, avgSpots, winrate) {
     return WN8Final(rDAMAGE, rSPOT, rFRAG, rDEF, rWIN);
 }
 
-function calculateRecents(statsSnapshot, overall, output) {
+function calculateRecents(statsSnapshot, overall) {
     if (statsSnapshot === 'frog') {
         return {
             battles: 0, tier: '-', overallWN8: '-', wins: '-', losses: '-', draws: '-', damage: '-', damage_received: '-', frags: '-', destroyed: '-', survived: '-', spotted: '-', cap: '-', def: '-', xp: '-',
@@ -66,7 +66,6 @@ function calculateRecents(statsSnapshot, overall, output) {
     calculatedStats.overallWN8 = overallWN8;
     let index = 0;
     overall.tankStats.map((row) => {
-        if (row[0] === 52305 && output) console.log('gsor');
         if (snapshotTanks.length < index + 1 || row[0] !== snapshotTanks[index][0]) {
             const avgDamage = row[2] / row[1];
             const avgDef = row[6] / row[1];
