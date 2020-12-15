@@ -13,17 +13,14 @@ function recentTime(stats, numEntries, currentTime, timeArr, offset) {
         const diff = currentTime - timeArr[i];
         if (Math.abs(diff - offset) < margin) {
             margin = Math.abs(diff - offset);
-            //console.log(i);
             properIndex = i;
         }
     }
     let counter = 0;
     while (Object.keys(stats[properIndex]).length === 0) {
-        console.log(counter);
         counter++;
         properIndex--;
     }
-    console.log("properindex: " + properIndex)
     return properIndex;
 }
 
