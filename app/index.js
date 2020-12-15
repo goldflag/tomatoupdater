@@ -3,7 +3,6 @@ const express = require("express");
 const db = require("./db");
 const morgan = require("morgan");
 const cron = require("node-cron");
-const schedule = require('node-schedule');
 const helmet = require('helmet');
 const async  = require('express-async-await');
 const fetch = require('node-fetch');
@@ -43,17 +42,11 @@ app.get("/api/abcd/:file", async (req, res) => {
     else res.status(200).json(WN8);
 });
 
-schedule.scheduleJob('8 1 * * *', function(){
-    console.log(`=================
-    ================
-    ==============
-    
-    
-    
-    
-    
-    
-    ============`);  });
+app.get("/update/:server", async (req, res) => {
+    if (req.params.server === 'eu') updater("eu");
+    if (req.params.server === 'com') updater("com");
+    res.status(200).send(`updating ${req.params.server}`);
+});
 
 // cron.schedule("21 0 * * *", function() {
 //     console.log("Running Daily EU Update at 10:30pm EST");
