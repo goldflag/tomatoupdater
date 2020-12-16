@@ -42,6 +42,11 @@ app.get("/api/abcd/:file", async (req, res) => {
     else res.status(200).json(WN8);
 });
 
+app.get("/updateFiles", async (req, res) => {
+    updateFiles();
+    res.status(200).send(`updating`);
+});
+
 app.get("/update/:server", async (req, res) => {
     if (req.params.server === 'eu') updater("eu");
     if (req.params.server === 'com') updater("com");

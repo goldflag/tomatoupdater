@@ -66,6 +66,7 @@ function calculateRecents(statsSnapshot, overall) {
     calculatedStats.overallWN8 = overallWN8;
     let index = 0;
     overall.tankStats.map((row) => {
+        // if (row[0] === 52305 || snapshotTanks[index][0] === 52305 ) console.log('gsor');
         if (snapshotTanks.length < index + 1 || row[0] !== snapshotTanks[index][0]) {
             const avgDamage = row[2] / row[1];
             const avgDef = row[6] / row[1];
