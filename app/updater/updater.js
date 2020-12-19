@@ -17,7 +17,7 @@ async function playerUpdater(server) {
             // console.log(`count: ${i} id: ${IDs[i + 0]}`);
             APIcall(count, IDs[i + 0]);
             count++;
-            if (count == 21) {
+            if (count == 22) {
                 count = 1;
             }
         }, i * 30);
@@ -25,7 +25,7 @@ async function playerUpdater(server) {
 
     async function APIcall(count, id) {
         // const res = await fetch(`http://localhost:5000/api/abcd/${server}/${id}`);
-        if (count === 1) console.log(id);
+        if (Math.floor(Math.random() * Math.floor(500) === 1)) console.log(id);
         await fetch(`https://tomatoserver${count}.herokuapp.com/abcd/${server}/${id}`);
     }
 }

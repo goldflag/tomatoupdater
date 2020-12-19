@@ -28,7 +28,6 @@ async function IDupdater(server) {
                 idstr += `%2C+${id}`;
                 idArr.push(id);
             }
-            //console.log('frog');
             APIcall(idstr, i, idArr, time);
         }, i * 1.05);
     }
