@@ -107,7 +107,6 @@ async function existingPlayer(res, currentTime, server, id, exists, compressedSt
         overallStats: overallStats,
         sessions: sessions,
         recents: recents, 
-        test: exists.rows[0].stats[index24hr]
     });
 }
 

@@ -20,7 +20,7 @@ async function playerUpdater(server) {
             if (count == 21) {
                 count = 1;
             }
-        }, i * 21);
+        }, i * 30);
     }
 
     async function APIcall(count, id) {

@@ -44,12 +44,6 @@ async function newPlayer(res, id, stats, data1, currentTime, compressedStats, se
         status: 'success', 
         linegraph: [],
         overall: compressedStats,
-        // recent24hr: 'frog',
-        // recent1week: 'frog',
-        // recent30days: 'frog',
-        // recent60days: 'frog', 
-        // recent1000: 'frog',
-        // recent500: 'frog',
         overallStats: overallStats,
         sessions: [],
         recents: recents
