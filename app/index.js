@@ -104,6 +104,15 @@ app.get("/api/abcd/:file", async (req, res) => {
     else res.status(200).json(WN8);
 });
 
+app.get("/api/abcd/moe/:server", async (req, res) => {
+    const servers = ['com', 'eu', 'ru', 'asia'];
+    if (req.params.server in servers) res.status(404).send('itsover');
+    let data = await fetch(`https://gunmarks.poliroid.ru/api/${req.params.server}/vehicles/50,65,85,95,100`);
+    data = await data.json();
+    res.status(200).json(data);
+});
+
+
 app.get("/api/abcd/stats/tankstats", async (req, res) => {
     const data = await db.query(`SELECT overall FROM serverstats WHERE server = 'com'`);
     res.status(200).json(data.rows[0]);
