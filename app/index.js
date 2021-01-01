@@ -21,6 +21,7 @@ const existingPlayer = require('./playerstats/existingPlayer.js')
 const updateFiles = require('./functions/updateFiles.js')
 
 const masteryTank = require('./gunmarks/masteryTank.js')
+const MoETank = require('./gunmarks/MoETank.js')
 
 const APIKey = process.env.API_KEY;
 
@@ -126,35 +127,7 @@ app.get("/api/abcd/moe/:server", async (req, res) => {
 });
 
 app.get("/api/abcd/moetank/:id/:server", async (req, res) => {
-    const servers = ['com', 'eu', 'ru', 'asia'];
-    if (!(servers.includes(req.params.server))) res.status(404).send('itsover');
-    if (!(req.params.id in tankNames)) res.status(404).send('itsover');
-
-    let data = await fetch(`https://gunmarks.poliroid.ru/api/${req.params.server}/vehicle/${req.params.id}/50,65,85,95,100`);
-    data = await data.json();
-    let newData = [];
-
-    const indexToNum = {
-        0: "50",
-        1: "65",
-        2: "85",
-        3: "95"
-    }
-
-    for (let i = 0; i < 4; ++i) {
-        let line = {
-            "id": indexToNum[i],
-            "data": [],
-        };
-        for (let j = data.data.length - 1; j >= 0; --j) {
-            let entry = {};
-            entry.x = data.data[j].date;
-            entry.y = data.data[j].marks[indexToNum[i]];
-            line.data.push(entry);
-        }
-        newData.push(line);
-    }
-    res.status(200).json(newData);
+    return MoETank(res, req.params.id, req.params.server);
 });
 
 app.get("/api/abcd/mastery/:server", async (req, res) => {
@@ -176,9 +149,7 @@ app.get("/api/abcd/mastery/:server", async (req, res) => {
 });
 
 app.get("/api/abcd/masterytank/:id/:server", async (req, res) => {
-
     return masteryTank(res, req.params.id, req.params.server);
-
 });
 
 app.get("/api/abcd/stats/tankstats", async (req, res) => {
