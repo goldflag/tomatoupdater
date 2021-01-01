@@ -20,6 +20,8 @@ const newPlayer = require('./playerstats/newPlayer.js');
 const existingPlayer = require('./playerstats/existingPlayer.js')
 const updateFiles = require('./functions/updateFiles.js')
 
+const mastery = require('./gunmarks/mastery.js')
+const MoE = require('./gunmarks/MoE.js')
 const masteryTank = require('./gunmarks/masteryTank.js')
 const MoETank = require('./gunmarks/MoETank.js')
 
@@ -108,22 +110,7 @@ app.get("/api/abcd/:file", async (req, res) => {
 });
 
 app.get("/api/abcd/moe/:server", async (req, res) => {
-    const servers = ['com', 'eu', 'ru', 'asia'];
-    if (!(servers.includes(req.params.server))) res.status(404).send('itsover');
-    let data = await fetch(`https://gunmarks.poliroid.ru/api/${req.params.server}/vehicles/50,65,85,95,100`);
-    data = await data.json();
-    let newData = [];
-    for (let i = 0; i < data.data.length; ++i) {
-        let entry = {};
-        entry.id = data.data[i].id;
-        entry['50'] = data.data[i].marks['50'];
-        entry['65'] = data.data[i].marks['65'];
-        entry['85'] = data.data[i].marks['85'];
-        entry['95'] = data.data[i].marks['95'];
-        entry['100'] = data.data[i].marks['100'];
-        newData.push(entry);
-    }
-    res.status(200).json(newData);
+    return MoE(res, req.params.server);
 });
 
 app.get("/api/abcd/moetank/:id/:server", async (req, res) => {
@@ -131,21 +118,7 @@ app.get("/api/abcd/moetank/:id/:server", async (req, res) => {
 });
 
 app.get("/api/abcd/mastery/:server", async (req, res) => {
-    const servers = ['com', 'eu', 'ru', 'asia'];
-    if (!(servers.includes(req.params.server))) res.status(404).send('itsover');
-    let data = await fetch(`https://mastery.poliroid.ru/api/${req.params.server}/vehicles`);
-    data = await data.json();
-    let newData = [];
-    for (let i = 0; i < data.data.length; ++i) {
-        let entry = {};
-        entry.id = data.data[i].id;
-        entry['3rd'] = data.data[i].mastery[0];
-        entry['2nd'] = data.data[i].mastery[1];
-        entry['1st'] = data.data[i].mastery[2];
-        entry['ace'] = data.data[i].mastery[3];
-        newData.push(entry);
-    }
-    res.status(200).json(newData);
+    return mastery(res, req.params.server);
 });
 
 app.get("/api/abcd/masterytank/:id/:server", async (req, res) => {
