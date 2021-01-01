@@ -106,7 +106,7 @@ app.get("/api/abcd/:file", async (req, res) => {
 
 app.get("/api/abcd/moe/:server", async (req, res) => {
     const servers = ['com', 'eu', 'ru', 'asia'];
-    if (req.params.server in servers) res.status(404).send('itsover');
+    if (!(servers.includes(req.params.server))) res.status(404).send('itsover');
     let data = await fetch(`https://gunmarks.poliroid.ru/api/${req.params.server}/vehicles/50,65,85,95,100`);
     data = await data.json();
     let newData = [];
@@ -125,25 +125,35 @@ app.get("/api/abcd/moe/:server", async (req, res) => {
 
 app.get("/api/abcd/moetank/:id/:server", async (req, res) => {
     const servers = ['com', 'eu', 'ru', 'asia'];
-    if (req.params.server in servers) res.status(404).send('itsover');
-    if (req.params.id in tankNames) res.status(404).send('itsover');
+    if (!(servers.includes(req.params.server))) res.status(404).send('itsover');
+    if (!(req.params.id in tankNames)) res.status(404).send('itsover');
 
     let data = await fetch(`https://gunmarks.poliroid.ru/api/${req.params.server}/vehicle/${req.params.id}/50,65,85,95,100`);
     data = await data.json();
     let newData = [];
-    for (let i = 0; i < data.data.length; ++i) {
-        let entry = {};
-        entry.id = data.data[i].id;
-        entry['50'] = data.data[i].marks['50'];
-        entry['65'] = data.data[i].marks['65'];
-        entry['85'] = data.data[i].marks['85'];
-        entry['95'] = data.data[i].marks['95'];
-        entry['100'] = data.data[i].marks['100'];
-        newData.push(entry);
+
+    const indexToNum = {
+        0: "50",
+        1: "65",
+        2: "85",
+        3: "95"
+    }
+
+    for (let i = 0; i < 4; ++i) {
+        let line = {
+            "id": indexToNum[i],
+            "data": [],
+        };
+        for (let j = data.data.length - 1; j >= 0; --j) {
+            let entry = {};
+            entry.x = data.data[j].date;
+            entry.y = data.data[j].marks[indexToNum[i]];
+            line.data.push(entry);
+        }
+        newData.push(line);
     }
     res.status(200).json(newData);
 });
-
 
 
 app.get("/api/abcd/stats/tankstats", async (req, res) => {
