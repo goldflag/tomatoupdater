@@ -155,6 +155,46 @@ app.get("/api/abcd/moetank/:id/:server", async (req, res) => {
     res.status(200).json(newData);
 });
 
+app.get("/api/abcd/mastery/:server", async (req, res) => {
+    const servers = ['com', 'eu', 'ru', 'asia'];
+    if (!(servers.includes(req.params.server))) res.status(404).send('itsover');
+    let data = await fetch(`https://mastery.poliroid.ru/api/${req.params.server}/vehicles`);
+    data = await data.json();
+    let newData = [];
+    for (let i = 0; i < data.data.length; ++i) {
+        let entry = {};
+        entry.id = data.data[i].id;
+        entry['3rd'] = data.data[i].mastery[0];
+        entry['2nd'] = data.data[i].mastery[1];
+        entry['1st'] = data.data[i].mastery[2];
+        entry['ace'] = data.data[i].mastery[3];
+        newData.push(entry);
+    }
+    res.status(200).json(newData);
+});
+
+app.get("/api/abcd/masterytank/:id/:server", async (req, res) => {
+    const servers = ['com', 'eu', 'ru', 'asia'];
+    if (!(servers.includes(req.params.server))) res.status(404).send('itsover');
+    if (!(req.params.id in tankNames)) res.status(404).send('itsover');
+    let data = await fetch(`https://mastery.poliroid.ru/api/${req.params.server}/vehicle/${req.params.id}`);
+    data = await data.json();
+    let newData = [];
+    for (let i = 0; i < 4; ++i) {
+        let line = {
+            "id": i,
+            "data": [],
+        };
+        for (let j = data.data.length - 1; j >= 0; --j) {
+            let entry = {};
+            entry.x = data.data[j].date;
+            entry.y = data.data[j].mastery[i];
+            line.data.push(entry);
+        }
+        newData.push(line);
+    }
+    res.status(200).json(newData);
+});
 
 app.get("/api/abcd/stats/tankstats", async (req, res) => {
     const data = await db.query(`SELECT overall FROM serverstats WHERE server = 'com'`);
