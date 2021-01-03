@@ -153,6 +153,16 @@ ALTER TABLE devcom ADD COLUMN sessions JSONB[];
 ALTER TABLE devcom ADD COLUMN lastSession JSONB;
 
 
+CREATE TABLE moetracker (
+    id SERIAL NOT NULL,
+    server VARCHAR(4) PRIMARY KEY NOT NULL,
+    data JSONB
+);
+
+INSERT INTO moetracker (server) VALUES ('com');
+
+UPDATE moetracker SET data = '[ {"wins": 10} ]' WHERE server = 'com';
+
 CREATE TABLE tempIDs (
     id SERIAL NOT NULL,
     server VARCHAR(4) PRIMARY KEY NOT NULL,

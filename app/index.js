@@ -18,12 +18,13 @@ const IDupdater = require('./updater/IDupdater.js');
 const updater = require('./updater/updater.js');
 const newPlayer = require('./playerstats/newPlayer.js');
 const existingPlayer = require('./playerstats/existingPlayer.js')
-const updateFiles = require('./functions/updateFiles.js')
+const updateFiles = require('./functions/updateFiles.js');
 
-const mastery = require('./gunmarks/mastery.js')
-const MoE = require('./gunmarks/MoE.js')
-const masteryTank = require('./gunmarks/masteryTank.js')
-const MoETank = require('./gunmarks/MoETank.js')
+const mastery = require('./gunmarks/mastery.js');
+const MoE = require('./gunmarks/MoE.js');
+const masteryTank = require('./gunmarks/masteryTank.js');
+const MoETank = require('./gunmarks/MoETank.js');
+const MoETracker = require('./gunmarks/MoETracker');
 
 const APIKey = process.env.API_KEY;
 
@@ -40,11 +41,6 @@ app.use((req, res, next) => {
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`server is up on ${port}`);
-});
-
-app.get("/api/abcd/:file", async (req, res) => {
-    if (req.params.file === 'tankNames') res.status(200).json(tankNames);  
-    else res.status(200).json(WN8);
 });
 
 app.get("/updateFiles", async (req, res) => {
@@ -104,9 +100,38 @@ SCHEMA OF TABLE FOR EACH SERVER:
     linegraph -> WN8/WR/DPG history for charts
 */
 
-app.get("/api/abcd/:file", async (req, res) => {
-    if (req.params.file === 'tankNames') res.status(200).json(tankNames);  
-    else res.status(200).json(WN8);
+app.get("/api/abcd/tankNames", async (req, res) => {
+    res.status(200).json(tankNames);  
+});
+
+app.get("/api/abcd/WN8", async (req, res) => {
+    res.status(200).json(WN8);
+});
+
+// app.get("/api/abcd/serverpop/:server", async (req, res) => {
+//     const servers = ['com', 'eu', 'ru', 'asia'];
+//     if (!(servers.includes(server))) res.status(404).send('itsover');
+// });
+
+app.get("/api/abcd/moetracker/update", async (req, res) => {
+    const servers = ['com', 'eu', 'ru', 'asia'];
+    servers.forEach((server) => MoETracker(server, res));
+    await MoETracker('com', res);
+    await MoETracker('eu', res);
+    await MoETracker('ru', res);
+    await MoETracker('asia', res);
+
+    res.status(200).send(`Updated moetracker`);
+
+});
+
+app.get("/api/abcd/moetracker/get/:server", async (req, res) => {
+    const servers = ['com', 'eu', 'ru', 'asia'];
+    if (servers.includes(req.params.server)) {
+        const data = await db.query(`SELECT data FROM moetracker WHERE server = $1`, [req.params.server]);
+        res.send(data.rows[0].data.data);
+    } 
+    else res.status(404).send('invalid server');
 });
 
 app.get("/api/abcd/moe/:server", async (req, res) => {
