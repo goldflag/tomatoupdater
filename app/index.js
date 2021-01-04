@@ -54,25 +54,15 @@ app.get("/update/:server", async (req, res) => {
     res.status(200).send(`updating ${req.params.server}`);
 });
 
-// cron.schedule("21 0 * * *", function() {
-//     console.log("Running Daily EU Update at 10:30pm EST");
-//     updater("eu");
-// });
+cron.schedule("0 2 * * *", function() {
+    console.log("Running Daily EU Update at 1:30AM EST");
+    fetch(`https://tomatobackend-oswt3.ondigitalocean.app/update/eu`);
+});
 
-// cron.schedule("0 7 * * *", function() {
-//     console.log("Running Daily NA Update at 6AM EST");
-//     updater("com");
-// });
-
-// cron.schedule("21 20 * * Thursday", function() {
-//     console.log("Running Weekly EU IDs Update on Thursday");
-//     IDupdater("eu");
-// });
-
-// cron.schedule("32 20 * * Wednesday", function() {
-//     console.log("Running Weekly NA IDs Update on Wednesday");
-//     IDupdater("com");
-// });
+cron.schedule("30 9 * * *", function() {
+    console.log("Running Daily NA Update at 8AM EST");
+    fetch(`https://tomatobackend-oswt3.ondigitalocean.app/update/com`);
+});
 
 /*
 There are 4 tables for the servers NA, EU, RU, and ASIA named devcom, deveu, devru, and devasia
