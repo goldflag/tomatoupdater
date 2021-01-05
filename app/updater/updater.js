@@ -1,5 +1,4 @@
 const fetch = require("node-fetch");
-// const NAids = require('./NAids.json');
 const db = require("../db");
 const async  = require('express-async-await');
 
