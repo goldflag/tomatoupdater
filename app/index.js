@@ -37,7 +37,7 @@ app.get("/updateFiles", async (req, res) => {
 
 app.get("/update/:server", async (req, res) => {
     if (req.params.server === 'eu') updater("eu");
-    if (req.params.server === 'com') updater("com");
+    else if (req.params.server === 'com') updater("com");
     res.status(200).send(`updating ${req.params.server}`);
 });
 
