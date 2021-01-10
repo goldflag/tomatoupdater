@@ -21,7 +21,7 @@ async function playerUpdater(server) {
             if (count == 22) {
                 count = 1;
             }
-        }, i * 20);
+        }, i * 30);
     }
 
     async function APIcall(count, id) {
