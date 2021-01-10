@@ -26,7 +26,7 @@ async function playerUpdater(server) {
 
     async function APIcall(count, id) {
         if (count === 20) console.log(id);
-        //await fetch(`https://tomatoserver${count}.herokuapp.com/update/${server}/${id}`);
+        await fetch(`https://tomatoserver${count}.herokuapp.com/update/${server}/${id}`);
     }
 }
 
