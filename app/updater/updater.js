@@ -11,9 +11,9 @@ async function playerUpdater(server) {
     if (server === "com") IDs = await db.query(`SELECT ids from ids where server = 'com'`); 
     else if (server === "eu") IDs = await db.query(`SELECT ids from ids where server = 'eu'`); 
     else if (server === "asia") IDs = await db.query(`SELECT ids from ids where server = 'asia'`); 
-    console.log(IDs.rows.length);
+    console.log(IDs.rows[0]);
 
-    IDs = IDs.rows;
+    IDs = IDs.rows[0].ids;
 
     let count = 1;
     for (let i = 0; i < IDs.length; ++i) {
