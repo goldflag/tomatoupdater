@@ -43,7 +43,6 @@ app.get("/downloadFiles/:server", async (req, res) => {
     else if (req.params.server === "eu") IDs = await db.query(`SELECT player_id from idseu where active = true`); 
     else if (req.params.server === "asia") IDs = await db.query(`SELECT player_id from idsasia where active = true`); 
 
-
     const arr = [];
 
     for (let i = 0; i < IDs.rowCount; ++i) {
@@ -61,7 +60,6 @@ app.get("/downloadFiles/:server", async (req, res) => {
 
         }
     }
-
     
     // const arr = [];
     // for (let i = 0; i < IDs.length; ++i) {
@@ -82,6 +80,7 @@ app.get("/downloadFiles/:server", async (req, res) => {
 app.get("/update/:server", async (req, res) => {
     if (req.params.server === 'eu') updater("eu");
     else if (req.params.server === 'com') updater("com");
+    else if (req.params.server === 'asia') updater("asia");
     res.status(200).send(`updating ${req.params.server}`);
 });
 
