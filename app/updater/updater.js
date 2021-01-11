@@ -11,8 +11,6 @@ async function playerUpdater(server) {
     if (server === "com") IDs = await db.query(`SELECT ids from ids where server = 'com'`); 
     else if (server === "eu") IDs = await db.query(`SELECT ids from ids where server = 'eu'`); 
     else if (server === "asia") IDs = await db.query(`SELECT ids from ids where server = 'asia'`); 
-    console.log(IDs.rows[0]);
-
     IDs = IDs.rows[0].ids;
     console.log(IDs);
 
@@ -29,7 +27,7 @@ async function playerUpdater(server) {
             if (count == 22) {
                 count = 1;
             }
-        }, i * 40);
+        }, i * 20);
     }
 
     async function APIcall(count, id) {
