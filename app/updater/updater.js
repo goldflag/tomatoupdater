@@ -18,16 +18,16 @@ async function playerUpdater(server) {
     // console.log(IDs);
 
     let count = 1;
-    for (let i = 0; i < IDs.length - 242929; ++i) {
+    for (let i = 0; i < IDs.length; ++i) {
         setTimeout(function () {
             // console.log(`count: ${i} id: ${IDs[i + 0]}`);
             // APIcall(count, IDs[i + 0].player_id);
-            APIcall(count, IDs[i + 242929]);
+            APIcall(count, IDs[i]);
             count++;
             if (count == 22) {
                 count = 1;
             }
-        }, i * 27);
+        }, i * 25);
     }
 
     async function APIcall(count, id) {
