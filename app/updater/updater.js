@@ -16,7 +16,7 @@ async function playerUpdater(server, type) {
     console.log(IDs);
 
     let maxCount = 22;
-    if (type == "new") maxCount = 19;
+    if (type == "updater") maxCount = 19;
 
     let count = 1;
     for (let i = 0; i < IDs.length; ++i) {
