@@ -77,7 +77,7 @@ app.get("/downloadFiles/:server", async (req, res) => {
     res.status(200).send(`downloaded`);
 });
 
-app.get("/update/:server/:type", async (req, res) => {
+app.get("/update/:server", async (req, res) => {
     if (req.params.server === 'eu') updater("eu", "server");
     else if (req.params.server === 'com') updater("com", "updater");
     else if (req.params.server === 'asia') updater("asia", "updater");
